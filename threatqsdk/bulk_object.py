@@ -345,9 +345,9 @@ class ThreatQObject(object):
                 for item in res:
                     for obj in objects:
                         if (
-                            obj.name and obj.name == item.get('name') or
-                            obj.value and obj.value == item.get('value') or
-                            obj.title and obj.title == item.get('title')
+                            obj.name and obj.name == item.get('name')
+                            or obj.value and obj.value == item.get('value')
+                            or obj.title and obj.title == item.get('title')
                         ):
                             obj._set_id(item.get('id'))
                             break

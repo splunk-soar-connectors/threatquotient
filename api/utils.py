@@ -242,10 +242,10 @@ class Utils(object):
 
         for obj in threatq_objects:
             if (
-                Utils.flatten_string(name) == Utils.flatten_string(obj['display_name']) or
-                Utils.flatten_string(name) == Utils.flatten_string(obj['name']) or
-                Utils.flatten_string(name) == Utils.flatten_string(obj['display_name_plural']) or
-                Utils.flatten_string(name) == Utils.flatten_string(obj['collection'])
+                Utils.flatten_string(name) == Utils.flatten_string(obj['display_name'])
+                or Utils.flatten_string(name) == Utils.flatten_string(obj['name'])
+                or Utils.flatten_string(name) == Utils.flatten_string(obj['display_name_plural'])
+                or Utils.flatten_string(name) == Utils.flatten_string(obj['collection'])
             ):
                 return obj
         return {}
@@ -313,8 +313,8 @@ class Utils(object):
         matched = None
         for user in tq_users:
             if (
-                Utils.flatten_string(assignee) == Utils.flatten_string(user['display_name']) or
-                Utils.flatten_string(assignee) == Utils.flatten_string(user['email'])
+                Utils.flatten_string(assignee) == Utils.flatten_string(user['display_name'])
+                or Utils.flatten_string(assignee) == Utils.flatten_string(user['email'])
             ):
                 matched = user
                 break
