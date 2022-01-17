@@ -243,9 +243,9 @@ class Utils(object):
         for obj in threatq_objects:
             if (
                 Utils.flatten_string(name) == Utils.flatten_string(obj['display_name'])
-                or Utils.flatten_string(name) == Utils.flatten_string(obj['name'])
-                or Utils.flatten_string(name) == Utils.flatten_string(obj['display_name_plural'])
-                or Utils.flatten_string(name) == Utils.flatten_string(obj['collection'])
+                or Utils.flatten_string(name) == Utils.flatten_string(obj['name']) # noqa
+                or Utils.flatten_string(name) == Utils.flatten_string(obj['display_name_plural']) # noqa
+                or Utils.flatten_string(name) == Utils.flatten_string(obj['collection']) # noqa
             ):
                 return obj
         return {}
@@ -314,7 +314,7 @@ class Utils(object):
         for user in tq_users:
             if (
                 Utils.flatten_string(assignee) == Utils.flatten_string(user['display_name'])
-                or Utils.flatten_string(assignee) == Utils.flatten_string(user['email'])
+                or Utils.flatten_string(assignee) == Utils.flatten_string(user['email']) # noqa
             ):
                 matched = user
                 break

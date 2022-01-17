@@ -346,8 +346,8 @@ class ThreatQObject(object):
                     for obj in objects:
                         if (
                             obj.name and obj.name == item.get('name')
-                            or obj.value and obj.value == item.get('value')
-                            or obj.title and obj.title == item.get('title')
+                            or obj.value and obj.value == item.get('value') # noqa
+                            or obj.title and obj.title == item.get('title') # noqa
                         ):
                             obj._set_id(item.get('id'))
                             break
