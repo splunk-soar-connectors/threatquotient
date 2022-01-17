@@ -1,12 +1,12 @@
 [comment]: # "Auto-generated SOAR connector documentation"
 # ThreatQ
 
-Publisher: ThreatQuotient  
-Connector Version: 2\.0\.6  
-Product Vendor: ThreatQuotient  
-Product Name: ThreatQ  
-Product Version Supported (regex): "4\.\*"  
-Minimum Product Version: 4\.10\.0\.40961  
+Publisher: ThreatQuotient
+Connector Version: 2\.0\.6
+Product Vendor: ThreatQuotient
+Product Name: ThreatQ
+Product Version Supported (regex): "4\.\*"
+Minimum Product Version: 4\.10\.0\.40961
 
 Integrates a variety of ThreatQ services into Splunk SOAR
 
@@ -30,18 +30,18 @@ Integrates a variety of ThreatQ services into Splunk SOAR
 ## <span id="Introduction_2"></span> Introduction
 
 The Splunk SOAR App for ThreatQ allows a user to execute a variety of actions on ThreatQ from a
-Phantom playbook.  
+Phantom playbook.
 With ThreatQ as a single source of truth for Threat Intelligence, you will be able to accurately
-triage a sighting, and ultimately, make a quick decision.  
+triage a sighting, and ultimately, make a quick decision.
 This will allow your analysts to focus on what’s important to their organization, instead of getting
-inundated with sightings of non-malicious indicators.  
+inundated with sightings of non-malicious indicators.
 The goal being, to increase your response time and improve your ROI.
 
 ## <span id="Installation_9"></span> Installation
 
 This section will describe how you can install the app into your Phantom instance
 
-**WARNING** : This release (v2.x) has fundamentally changed how the App operates!  
+**WARNING** : This release (v2.x) has fundamentally changed how the App operates!
 If you are upgrading from v1.x, please refer to the
 `     App Instructions -> Upgrading from 1.x to 2.x    ` section!
 
@@ -102,7 +102,7 @@ The following actions come out of the box with the Splunk SOAR App for ThreatQ
 
 -   indicator_list: A list of indicators to add
 
-**Formatting:**  
+**Formatting:**
 See *Details \> Formatting an Indicator List*
 
 ### <span id="Create_Task_71"></span> Create Task
@@ -120,7 +120,7 @@ See *Details \> Formatting an Indicator List*
 -   task_description: The description of the task
 -   indicator_list: A list of indicators to relate to the task
 
-**Formatting:**  
+**Formatting:**
 See *Details \> Formatting an Indicator List*
 
 ### <span id="Create_Event_88"></span> Create Event
@@ -134,7 +134,7 @@ See *Details \> Formatting an Indicator List*
 -   event_type: The type of event to create in ThreatQ
 -   indicator_list: A list of indicators to relate to the event
 
-**Formatting:**  
+**Formatting:**
 See *Details \> Formatting an Indicator List*
 
 ### <span id="Create_Spearphish_101"></span> Create Spearphish
@@ -175,7 +175,7 @@ vault
 -   investigation_visibility: Whether the investigation is public or private
 -   indicator_list: A list of indicators to relate to the investigation
 
-**Formatting:**  
+**Formatting:**
 See *Details \> Formatting an Indicator List*
 
 ### <span id="Create_Adversaries_138"></span> Create Adversaries
@@ -223,7 +223,7 @@ See *Details \> Formatting an Indicator List*
 -   indicator_list: A list of indicators
 -   indicator_status: The status to give to the list of indicators
 
-**Formatting:**  
+**Formatting:**
 See *Details \> Formatting an Indicator List*
 
 ## <span id="App_Instructions_182"></span> App Instructions
@@ -294,372 +294,372 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **password** |  required  | password | Password
 **trust\_ssl** |  optional  | boolean | Trust SSL Certificate?
 
-### Supported Actions  
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity  
-[query indicators](#action-query-indicators) - Query ThreatQ for indicator context  
-[create indicators](#action-create-indicators) - Create indicators within ThreatQ  
-[create adversaries](#action-create-adversaries) - Create adversaries within ThreatQ  
-[create custom objects](#action-create-custom-objects) - Create custom objects within ThreatQ  
-[add attribute](#action-add-attribute) - Adds an attribute to objects in ThreatQ  
-[set indicator status](#action-set-indicator-status) - Set a status for a given list of indicators  
-[create task](#action-create-task) - Create a task within ThreatQ  
-[create event](#action-create-event) - Create an event within ThreatQ  
-[start investigation](#action-start-investigation) - Start an investigation within ThreatQ  
-[upload spearphish](#action-upload-spearphish) - Upload a spearphish attempt to ThreatQ  
-[upload file](#action-upload-file) - Upload \(and parse\) a file to ThreatQ  
-[get related objects](#action-get-related-objects) - Query ThreatQ for an object's relationships  
+### Supported Actions
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity
+[query indicators](#action-query-indicators) - Query ThreatQ for indicator context
+[create indicators](#action-create-indicators) - Create indicators within ThreatQ
+[create adversaries](#action-create-adversaries) - Create adversaries within ThreatQ
+[create custom objects](#action-create-custom-objects) - Create custom objects within ThreatQ
+[add attribute](#action-add-attribute) - Adds an attribute to objects in ThreatQ
+[set indicator status](#action-set-indicator-status) - Set a status for a given list of indicators
+[create task](#action-create-task) - Create a task within ThreatQ
+[create event](#action-create-event) - Create an event within ThreatQ
+[start investigation](#action-start-investigation) - Start an investigation within ThreatQ
+[upload spearphish](#action-upload-spearphish) - Upload a spearphish attempt to ThreatQ
+[upload file](#action-upload-file) - Upload \(and parse\) a file to ThreatQ
+[get related objects](#action-get-related-objects) - Query ThreatQ for an object's relationships
 
 ## action: 'test connectivity'
 Validate the asset configuration for connectivity
 
-Type: **test**  
+Type: **test**
 Read only: **True**
 
 #### Action Parameters
 No parameters are required for this action
 
 #### Action Output
-No Output  
+No Output
 
 ## action: 'query indicators'
 Query ThreatQ for indicator context
 
-Type: **investigate**  
+Type: **investigate**
 Read only: **True**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**indicator\_list** |  required  | A comma\-separated or line\-separated list of indicator values | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name` 
-**exact** |  optional  | Do we want to find an exact match or an approximate match? | boolean | 
-**with\_all\_relationships** |  optional  | Should we fetch all relationships with this action? | boolean | 
+**indicator\_list** |  required  | A comma\-separated or line\-separated list of indicator values | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name`
+**exact** |  optional  | Do we want to find an exact match or an approximate match? | boolean |
+**with\_all\_relationships** |  optional  | Should we fetch all relationships with this action? | boolean |
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.exact | boolean | 
-action\_result\.parameter\.indicator\_list | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name` 
-action\_result\.parameter\.with\_all\_relationships | boolean | 
-action\_result\.data\.\*\.adversaries\.\*\.name | string | 
-action\_result\.data\.\*\.attack\_pattern\.\*\.value | string | 
-action\_result\.data\.\*\.attributes | string | 
-action\_result\.data\.\*\.campaign\.\*\.value | string | 
-action\_result\.data\.\*\.course\_of\_action\.\*\.value | string | 
-action\_result\.data\.\*\.events\.\*\.title | string | 
-action\_result\.data\.\*\.exploit\_targets\.\*\.value | string | 
-action\_result\.data\.\*\.identity\.\*\.value | string | 
-action\_result\.data\.\*\.incident\.\*\.value | string | 
-action\_result\.data\.\*\.indicators\.\*\.value | string | 
-action\_result\.data\.\*\.intrusion\_set\.\*\.value | string | 
-action\_result\.data\.\*\.malware\.\*\.value | string | 
-action\_result\.data\.\*\.report\.\*\.value | string | 
-action\_result\.data\.\*\.score | numeric | 
-action\_result\.data\.\*\.signatures\.\*\.name | string | 
-action\_result\.data\.\*\.signatures\.\*\.value | string | 
-action\_result\.data\.\*\.sources\.\*\.name | string | 
-action\_result\.data\.\*\.status\.name | string | 
-action\_result\.data\.\*\.tool\.\*\.value | string | 
-action\_result\.data\.\*\.ttp\.\*\.value | string | 
-action\_result\.data\.\*\.type\.name | string | 
-action\_result\.data\.\*\.value | string | 
-action\_result\.data\.\*\.vulnerability\.\*\.value | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.total | numeric | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+action\_result\.parameter\.exact | boolean |
+action\_result\.parameter\.indicator\_list | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name`
+action\_result\.parameter\.with\_all\_relationships | boolean |
+action\_result\.data\.\*\.adversaries\.\*\.name | string |
+action\_result\.data\.\*\.attack\_pattern\.\*\.value | string |
+action\_result\.data\.\*\.attributes | string |
+action\_result\.data\.\*\.campaign\.\*\.value | string |
+action\_result\.data\.\*\.course\_of\_action\.\*\.value | string |
+action\_result\.data\.\*\.events\.\*\.title | string |
+action\_result\.data\.\*\.exploit\_targets\.\*\.value | string |
+action\_result\.data\.\*\.identity\.\*\.value | string |
+action\_result\.data\.\*\.incident\.\*\.value | string |
+action\_result\.data\.\*\.indicators\.\*\.value | string |
+action\_result\.data\.\*\.intrusion\_set\.\*\.value | string |
+action\_result\.data\.\*\.malware\.\*\.value | string |
+action\_result\.data\.\*\.report\.\*\.value | string |
+action\_result\.data\.\*\.score | numeric |
+action\_result\.data\.\*\.signatures\.\*\.name | string |
+action\_result\.data\.\*\.signatures\.\*\.value | string |
+action\_result\.data\.\*\.sources\.\*\.name | string |
+action\_result\.data\.\*\.status\.name | string |
+action\_result\.data\.\*\.tool\.\*\.value | string |
+action\_result\.data\.\*\.ttp\.\*\.value | string |
+action\_result\.data\.\*\.type\.name | string |
+action\_result\.data\.\*\.value | string |
+action\_result\.data\.\*\.vulnerability\.\*\.value | string |
+action\_result\.status | string |
+action\_result\.message | string |
+action\_result\.summary\.total | numeric |
+summary\.total\_objects | numeric |
+summary\.total\_objects\_successful | numeric |
 
 ## action: 'create indicators'
 Create indicators within ThreatQ
 
-Type: **generic**  
+Type: **generic**
 Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**indicator\_list** |  required  | A comma\-separated or line\-separated list of indicators and indicator type \(optional\) name/value pairs \(e\.g\.\: IP Address\: 1\.1\.1\.1\) | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name` 
-**indicator\_status** |  optional  | The default status for the indicators uploaded to ThreatQ | string | 
+**indicator\_list** |  required  | A comma\-separated or line\-separated list of indicators and indicator type \(optional\) name/value pairs \(e\.g\.\: IP Address\: 1\.1\.1\.1\) | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name`
+**indicator\_status** |  optional  | The default status for the indicators uploaded to ThreatQ | string |
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.indicator\_list | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name` 
-action\_result\.parameter\.indicator\_status | string | 
-action\_result\.data\.\*\.value | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.total | numeric | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+action\_result\.parameter\.indicator\_list | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name`
+action\_result\.parameter\.indicator\_status | string |
+action\_result\.data\.\*\.value | string |
+action\_result\.status | string |
+action\_result\.message | string |
+action\_result\.summary\.total | numeric |
+summary\.total\_objects | numeric |
+summary\.total\_objects\_successful | numeric |
 
 ## action: 'create adversaries'
 Create adversaries within ThreatQ
 
-Type: **generic**  
+Type: **generic**
 Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**adversary\_list** |  required  | A comma\-separated or line\-separated list of adversary names | string | 
+**adversary\_list** |  required  | A comma\-separated or line\-separated list of adversary names | string |
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.adversary\_list | string | 
-action\_result\.data\.\*\.name | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.total | numeric | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+action\_result\.parameter\.adversary\_list | string |
+action\_result\.data\.\*\.name | string |
+action\_result\.status | string |
+action\_result\.message | string |
+action\_result\.summary\.total | numeric |
+summary\.total\_objects | numeric |
+summary\.total\_objects\_successful | numeric |
 
 ## action: 'create custom objects'
 Create custom objects within ThreatQ
 
-Type: **generic**  
+Type: **generic**
 Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**object\_list** |  required  | A comma\-separated or line\-separated list of custom object values | string | 
-**object\_type** |  required  | The object type of the specified list values | string | 
+**object\_list** |  required  | A comma\-separated or line\-separated list of custom object values | string |
+**object\_type** |  required  | The object type of the specified list values | string |
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.object\_list | string | 
-action\_result\.parameter\.object\_type | string | 
-action\_result\.data\.\*\.value | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.total | numeric | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+action\_result\.parameter\.object\_list | string |
+action\_result\.parameter\.object\_type | string |
+action\_result\.data\.\*\.value | string |
+action\_result\.status | string |
+action\_result\.message | string |
+action\_result\.summary\.total | numeric |
+summary\.total\_objects | numeric |
+summary\.total\_objects\_successful | numeric |
 
 ## action: 'add attribute'
 Adds an attribute to objects in ThreatQ
 
-Type: **generic**  
+Type: **generic**
 Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**object\_list** |  required  | A comma\-separated or line\-separated list of object values | string | 
-**object\_type** |  required  | The object type of the specified list values | string | 
-**attribute\_name** |  required  | The name of the attribute in ThreatQ | string | 
-**attribute\_value** |  required  | The value fo the attribute in ThreatQ | string | 
+**object\_list** |  required  | A comma\-separated or line\-separated list of object values | string |
+**object\_type** |  required  | The object type of the specified list values | string |
+**attribute\_name** |  required  | The name of the attribute in ThreatQ | string |
+**attribute\_value** |  required  | The value fo the attribute in ThreatQ | string |
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.attribute\_name | string | 
-action\_result\.parameter\.attribute\_value | string | 
-action\_result\.parameter\.object\_list | string | 
-action\_result\.parameter\.object\_type | string | 
-action\_result\.data\.\*\.name | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.data\.\*\.value | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.total | numeric | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+action\_result\.parameter\.attribute\_name | string |
+action\_result\.parameter\.attribute\_value | string |
+action\_result\.parameter\.object\_list | string |
+action\_result\.parameter\.object\_type | string |
+action\_result\.data\.\*\.name | string |
+action\_result\.data\.\*\.title | string |
+action\_result\.data\.\*\.value | string |
+action\_result\.status | string |
+action\_result\.message | string |
+action\_result\.summary\.total | numeric |
+summary\.total\_objects | numeric |
+summary\.total\_objects\_successful | numeric |
 
 ## action: 'set indicator status'
 Set a status for a given list of indicators
 
-Type: **generic**  
+Type: **generic**
 Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**indicator\_list** |  required  | A comma\-separated or line\-separated list of indicators and indicator type \(optional\) name/value pairs \(e\.g\.\: IP Address\: 1\.1\.1\.1\) | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name` 
-**indicator\_status** |  required  | The status to give to the list of indicators | string | 
+**indicator\_list** |  required  | A comma\-separated or line\-separated list of indicators and indicator type \(optional\) name/value pairs \(e\.g\.\: IP Address\: 1\.1\.1\.1\) | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name`
+**indicator\_status** |  required  | The status to give to the list of indicators | string |
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.indicator\_list | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name` 
-action\_result\.parameter\.indicator\_status | string | 
-action\_result\.data\.\*\.value | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.total | numeric | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+action\_result\.parameter\.indicator\_list | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name`
+action\_result\.parameter\.indicator\_status | string |
+action\_result\.data\.\*\.value | string |
+action\_result\.status | string |
+action\_result\.message | string |
+action\_result\.summary\.total | numeric |
+summary\.total\_objects | numeric |
+summary\.total\_objects\_successful | numeric |
 
 ## action: 'create task'
 Create a task within ThreatQ
 
-Type: **generic**  
+Type: **generic**
 Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**task\_prefix** |  optional  | Prefix for the task name | string | 
-**task\_name** |  required  | Task name | string | 
-**assigned\_to** |  optional  | ThreatQ user to assign the task to | string | 
-**task\_status** |  required  | Task status in ThreatQ | string | 
-**task\_priority** |  required  | Task priority in ThreatQ | string | 
-**task\_description** |  optional  | Task description in ThreatQ | string | 
-**indicator\_list** |  optional  | List of indicator values \(use format node\) | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name` 
+**task\_prefix** |  optional  | Prefix for the task name | string |
+**task\_name** |  required  | Task name | string |
+**assigned\_to** |  optional  | ThreatQ user to assign the task to | string |
+**task\_status** |  required  | Task status in ThreatQ | string |
+**task\_priority** |  required  | Task priority in ThreatQ | string |
+**task\_description** |  optional  | Task description in ThreatQ | string |
+**indicator\_list** |  optional  | List of indicator values \(use format node\) | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name`
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.assigned\_to | string | 
-action\_result\.parameter\.indicator\_list | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name` 
-action\_result\.parameter\.task\_description | string | 
-action\_result\.parameter\.task\_name | string | 
-action\_result\.parameter\.task\_prefix | string | 
-action\_result\.parameter\.task\_priority | string | 
-action\_result\.parameter\.task\_status | string | 
-action\_result\.data\.\*\.value | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+action\_result\.parameter\.assigned\_to | string |
+action\_result\.parameter\.indicator\_list | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name`
+action\_result\.parameter\.task\_description | string |
+action\_result\.parameter\.task\_name | string |
+action\_result\.parameter\.task\_prefix | string |
+action\_result\.parameter\.task\_priority | string |
+action\_result\.parameter\.task\_status | string |
+action\_result\.data\.\*\.value | string |
+action\_result\.status | string |
+action\_result\.message | string |
+action\_result\.summary | string |
+summary\.total\_objects | numeric |
+summary\.total\_objects\_successful | numeric |
 
 ## action: 'create event'
 Create an event within ThreatQ
 
-Type: **generic**  
+Type: **generic**
 Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**event\_type** |  required  | The event type in ThreatQ | string | 
-**indicator\_list** |  optional  | List of comma\-separated or line\-separated indicator | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name` 
+**event\_type** |  required  | The event type in ThreatQ | string |
+**indicator\_list** |  optional  | List of comma\-separated or line\-separated indicator | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name`
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.event\_type | string | 
-action\_result\.parameter\.indicator\_list | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name` 
-action\_result\.data\.\*\.title | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+action\_result\.parameter\.event\_type | string |
+action\_result\.parameter\.indicator\_list | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name`
+action\_result\.data\.\*\.title | string |
+action\_result\.status | string |
+action\_result\.message | string |
+action\_result\.summary | string |
+summary\.total\_objects | numeric |
+summary\.total\_objects\_successful | numeric |
 
 ## action: 'start investigation'
 Start an investigation within ThreatQ
 
-Type: **generic**  
+Type: **generic**
 Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**investigation\_name** |  required  | The investigation name | string | 
-**investigation\_priority** |  required  | The investigation's priority | string | 
-**investigation\_visibility** |  required  | The investigation's sharing status | string | 
-**investigation\_description** |  optional  | The investigation's description | string | 
-**indicator\_list** |  required  | List of comma\-separated or line\-separated indicator | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name` 
+**investigation\_name** |  required  | The investigation name | string |
+**investigation\_priority** |  required  | The investigation's priority | string |
+**investigation\_visibility** |  required  | The investigation's sharing status | string |
+**investigation\_description** |  optional  | The investigation's description | string |
+**indicator\_list** |  required  | List of comma\-separated or line\-separated indicator | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name`
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.indicator\_list | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name` 
-action\_result\.parameter\.investigation\_description | string | 
-action\_result\.parameter\.investigation\_name | string | 
-action\_result\.parameter\.investigation\_priority | string | 
-action\_result\.parameter\.investigation\_visibility | string | 
-action\_result\.data\.\*\.name | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+action\_result\.parameter\.indicator\_list | string |  `domain`  `ip`  `email`  `url`  `hash`  `sha256`  `string`  `file name`  `file path`  `host name`  `md5`  `process name`  `sha1`  `user name`
+action\_result\.parameter\.investigation\_description | string |
+action\_result\.parameter\.investigation\_name | string |
+action\_result\.parameter\.investigation\_priority | string |
+action\_result\.parameter\.investigation\_visibility | string |
+action\_result\.data\.\*\.name | string |
+action\_result\.status | string |
+action\_result\.message | string |
+action\_result\.summary | string |
+summary\.total\_objects | numeric |
+summary\.total\_objects\_successful | numeric |
 
 ## action: 'upload spearphish'
 Upload a spearphish attempt to ThreatQ
 
-Type: **generic**  
+Type: **generic**
 Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**vault\_id** |  required  | The Vault ID for the spearphish email file | string |  `vault id` 
-**indicator\_status** |  optional  | Default indicator status\. If none selected, Review is used | string | 
+**vault\_id** |  required  | The Vault ID for the spearphish email file | string |  `vault id`
+**indicator\_status** |  optional  | Default indicator status\. If none selected, Review is used | string |
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.indicator\_status | string | 
-action\_result\.parameter\.vault\_id | string |  `vault id` 
-action\_result\.data\.\*\.title | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+action\_result\.parameter\.indicator\_status | string |
+action\_result\.parameter\.vault\_id | string |  `vault id`
+action\_result\.data\.\*\.title | string |
+action\_result\.status | string |
+action\_result\.message | string |
+action\_result\.summary | string |
+summary\.total\_objects | numeric |
+summary\.total\_objects\_successful | numeric |
 
 ## action: 'upload file'
 Upload \(and parse\) a file to ThreatQ
 
-Type: **generic**  
+Type: **generic**
 Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**vault\_id** |  required  | The Vault ID for the file to upload | string |  `vault id` 
-**parse\_for\_indicators** |  required  | Whether or not to parse the file for indicators | boolean | 
-**indicator\_status** |  optional  | Default indicator status\. If none selected, Review is used | string | 
+**vault\_id** |  required  | The Vault ID for the file to upload | string |  `vault id`
+**parse\_for\_indicators** |  required  | Whether or not to parse the file for indicators | boolean |
+**indicator\_status** |  optional  | Default indicator status\. If none selected, Review is used | string |
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.indicator\_status | string | 
-action\_result\.parameter\.parse\_for\_indicators | boolean | 
-action\_result\.parameter\.vault\_id | string |  `vault id` 
-action\_result\.data\.\*\.name | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+action\_result\.parameter\.indicator\_status | string |
+action\_result\.parameter\.parse\_for\_indicators | boolean |
+action\_result\.parameter\.vault\_id | string |  `vault id`
+action\_result\.data\.\*\.name | string |
+action\_result\.status | string |
+action\_result\.message | string |
+action\_result\.summary | string |
+summary\.total\_objects | numeric |
+summary\.total\_objects\_successful | numeric |
 
 ## action: 'get related objects'
 Query ThreatQ for an object's relationships
 
-Type: **investigate**  
+Type: **investigate**
 Read only: **True**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**object\_list** |  required  | A comma\-separated or line\-separated list of custom object values | string | 
-**object\_type** |  required  | The object type of the specified list values | string | 
-**related\_object\_type** |  required  | The object type of the relationships you want to find | string | 
+**object\_list** |  required  | A comma\-separated or line\-separated list of custom object values | string |
+**object\_type** |  required  | The object type of the specified list values | string |
+**related\_object\_type** |  required  | The object type of the relationships you want to find | string |
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
-action\_result\.parameter\.object\_list | string | 
-action\_result\.parameter\.object\_type | string | 
-action\_result\.parameter\.related\_object\_type | string | 
-action\_result\.data\.\*\.attributes | string | 
-action\_result\.data\.\*\.name | string | 
-action\_result\.data\.\*\.score | numeric | 
-action\_result\.data\.\*\.sources\.\*\.name | string | 
-action\_result\.data\.\*\.status\.name | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.data\.\*\.type\.name | string | 
-action\_result\.data\.\*\.value | string | 
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.summary\.total | numeric | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric | 
+action\_result\.parameter\.object\_list | string |
+action\_result\.parameter\.object\_type | string |
+action\_result\.parameter\.related\_object\_type | string |
+action\_result\.data\.\*\.attributes | string |
+action\_result\.data\.\*\.name | string |
+action\_result\.data\.\*\.score | numeric |
+action\_result\.data\.\*\.sources\.\*\.name | string |
+action\_result\.data\.\*\.status\.name | string |
+action\_result\.data\.\*\.title | string |
+action\_result\.data\.\*\.type\.name | string |
+action\_result\.data\.\*\.value | string |
+action\_result\.status | string |
+action\_result\.message | string |
+action\_result\.summary\.total | numeric |
+summary\.total\_objects | numeric |
+summary\.total\_objects\_successful | numeric |

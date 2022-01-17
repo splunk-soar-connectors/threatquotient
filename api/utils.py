@@ -17,11 +17,12 @@
 
 import json
 import re
-
 from copy import copy
+
 from six import string_types
+
 from .indicator_parser import IndicatorParser
-from .tq_mappings import statused_objects, threatq_objects, typed_objects, object_types
+from .tq_mappings import object_types, statused_objects, threatq_objects, typed_objects
 
 
 class Utils(object):

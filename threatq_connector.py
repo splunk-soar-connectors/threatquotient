@@ -17,18 +17,17 @@
 
 import json
 import os
-import requests
 import traceback
-
 from datetime import datetime
-from dateutil.parser import parse as parse_date
 from urllib.parse import unquote_plus
 
 # Phantom imports
 import phantom.app as phantom
+import phantom.rules as ph_rules
+import requests
+from dateutil.parser import parse as parse_date
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
-import phantom.rules as ph_rules
 
 # ThreatQ imports
 from api import Utils
@@ -918,7 +917,9 @@ class ThreatQConnector(BaseConnector):
                 self.tq.post('/api/investigations/{}/nodes'.format(res['id']), data=data)
             except Exception as e:
                 error_msg = self._get_error_message_from_exception(e)
-                msg = '{}. {} -- {}'.format(THREATQ_ERR_RELATE_INDICATOR_TO_INVESTIGATION.format(ind), error_msg, traceback.format_exc())
+                msg = '{}. {} -- {}'.format(
+                    THREATQ_ERR_RELATE_INDICATOR_TO_INVESTIGATION.format(ind), error_msg, traceback.format_exc()
+                )
                 self.debug_print(msg)
                 failed_count += 1
 
@@ -1615,8 +1616,9 @@ class ThreatQConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import pudb
     import argparse
+
+    import pudb
 
     pudb.set_trace()
 

@@ -15,9 +15,10 @@
 # Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt)
 ###########################################################################################################
 
-from datetime import datetime
 import json
+from datetime import datetime
 from logging import getLogger
+
 from . import exceptions
 
 _logger = getLogger(__name__)
@@ -34,7 +35,7 @@ class TokenHolder(object):
                 'clientid': 'Client ID from ThreatQ OAuth panel',
                 'auth': {
                     'email': 'you@yourcomapny.com',
-                    'password': 'your super secret password'
+                    'password': 'your super secret password' # pragma: allowlist secret
                 }
             }
 

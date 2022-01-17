@@ -15,28 +15,27 @@
 # Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt)
 ###########################################################################################################
 
-from datetime import datetime
 import json
-from logging import getLogger
 import os
 import random
 import re
+from datetime import datetime
+from logging import getLogger
+
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 # import all of the child modules so consumers can easily access them
+from . import bulk_object  # NOQA
+from . import event  # NOQA
 from . import file  # NOQA
-from . import authentication
-from . import exceptions
-from . import bulk_object # NOQA
-from . import tqobject # NOQA
-from . import source # NOQA
-from . import event # NOQA
-
+from . import source  # NOQA
+from . import tqobject  # NOQA
+from . import authentication, exceptions
+from .bulk_object import ThreatQAttribute, ThreatQObject, ThreatQSource
+from .event import Event
 # reexport some commonly used types
 from .file import File  # NOQA
-from .event import Event
-from .bulk_object import ThreatQObject, ThreatQSource, ThreatQAttribute
 
 __all__ = [
     # submodules

@@ -17,10 +17,10 @@
 
 import logging
 import math
-
 from random import randint
-from six import string_types
 from time import sleep
+
+from six import string_types
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

@@ -17,10 +17,11 @@
 
 # pragma pylint: disable=no-method-argument
 
-from abc import ABCMeta, abstractmethod
 import datetime
-from .exceptions import ActionFailedError
 import warnings
+from abc import ABCMeta, abstractmethod
+
+from .exceptions import ActionFailedError
 
 
 class ThreatQuotientObject(object):
