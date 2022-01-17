@@ -6,6 +6,9 @@
     "contributors": [
         {
             "name": "Emanuel Rodrigues"
+        },
+        {
+            "name": "Robert Asztalos"
         }
     ],
     "package_name": "threatq",

@@ -2,7 +2,7 @@
 # ThreatQ
 
 Publisher: ThreatQuotient  
-Connector Version: 2\.0\.4  
+Connector Version: 2\.0\.6  
 Product Vendor: ThreatQuotient  
 Product Name: ThreatQ  
 Product Version Supported (regex): "4\.\*"  
@@ -266,6 +266,8 @@ N/A
 
 ## <span id="Changelog_212"></span> Changelog
 
+-   Version 2.0.6
+    -   Fixed unwanted FQDN indicators creation when a parsed URL does not have a URL path
 -   Version 2.0.3
     -   Rewrite of the app to improve stability, error handling, and input support
     -   Remove all “reputation” actions, and replaced them with an all-in-one query action
