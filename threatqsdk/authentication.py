@@ -116,7 +116,7 @@ class TokenHolder(object):
         }
         if not self.private:
             r = self.session.post(
-                self.threatq_host+"/api/token",
+                self.threatq_host + "/api/token",
                 headers={
                     'Authorization': 'Bearer %s' % self.accesstoken,
                     'content-type': 'application/json'
@@ -125,7 +125,7 @@ class TokenHolder(object):
             )
         else:
             r = self.session.post(
-                self.threatq_host+"/api/token",
+                self.threatq_host + "/api/token",
                 headers={
                     'Authorization': 'Bearer %s' % self.accesstoken,
                     'content-type': 'application/json'},

@@ -177,7 +177,7 @@ class Threatq(object):
             endpoint = '/' + endpoint
 
         r = self.session.put(
-            self.threatq_host+endpoint,
+            self.threatq_host + endpoint,
             headers={
                 'Authorization': 'Bearer %s' % self.auth.accesstoken,
                 'content-type': 'application/json'
@@ -213,7 +213,7 @@ class Threatq(object):
         if endpoint[0] != '/':
             endpoint = '/' + endpoint
 
-        r = self.session.delete(self.threatq_host+endpoint, headers={
+        r = self.session.delete(self.threatq_host + endpoint, headers={
                 'Authorization': 'Bearer %s' % self.auth.accesstoken,
             }
         )
@@ -246,7 +246,7 @@ class Threatq(object):
 
         if files:
             r = self.session.post(
-                self.threatq_host+endpoint,
+                self.threatq_host + endpoint,
                 headers={
                     'Authorization': 'Bearer %s' % self.auth.accesstoken,
                 },
@@ -256,7 +256,7 @@ class Threatq(object):
             )
         else:
             r = self.session.post(
-                self.threatq_host+endpoint,
+                self.threatq_host + endpoint,
                 headers={
                     'Authorization': 'Bearer %s' % self.auth.accesstoken,
                     'content-type': 'application/json'
@@ -297,7 +297,7 @@ class Threatq(object):
             created
         """
         res = self.post(
-            "/api/indicators/"+str(iid)+"/attributes",
+            "/api/indicators/" + str(iid) + "/attributes",
             data={
                 'name': key,
                 'value': value
@@ -515,7 +515,7 @@ class Threatq(object):
 
         res = self.get(
             '/api/imports/%i/indicators' % iid,
-            )
+        )
 
         r = res.get('data')
         if not r:
