@@ -12,7 +12,16 @@
 # Dissemination of this information or reproduction of this material is strictly forbidden unless prior
 # written permission is obtained from ThreatQuotient, Inc.
 #
-# Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt)
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific language governing permissions
+# and limitations under the License.
 ###########################################################################################################
 
 import json
@@ -1553,6 +1562,7 @@ class ThreatQConnector(BaseConnector):
         """
 
         status = phantom.APP_SUCCESS
+        action_results = self.add_action_result(ActionResult(params))
 
         # Get the action that we are supposed to execute for this App Run
         action_id = self.get_action_identifier()
@@ -1585,12 +1595,12 @@ class ThreatQConnector(BaseConnector):
             error_msg = unquote_plus(self._get_error_message_from_exception(e))
             msg = '{} -- {}'.format(error_msg, traceback.format_exc())
             self.debug_print(msg)
-            return self.set_status(phantom.APP_ERROR, THREATQ_ERR_CONNECTIVITY_TEST.format(error=error_msg))
+            return action_results.set_status(phantom.APP_ERROR, THREATQ_ERR_CONNECTIVITY_TEST.format(error=error_msg))
 
         # Get the action
         action = self.action_map.get(action_id)
         if not action:
-            return self.set_status(
+            return action_results.set_status(
                 phantom.APP_ERROR, "No action handler associated with action [{}]".format(action_id))
 
         try:
@@ -1601,8 +1611,8 @@ class ThreatQConnector(BaseConnector):
             msg = '{} -- {}'.format(error_msg, traceback.format_exc())
             self.debug_print(msg)
 
-            action_results = ActionResult(dict(params))
-            action_results.set_status(phantom.APP_ERROR, error_msg)
+            # action_results = ActionResult(dict(params))
+            return action_results.set_status(phantom.APP_ERROR, error_msg)
 
         if not isinstance(action_results, list):
             action_results = [action_results]
@@ -1611,7 +1621,7 @@ class ThreatQConnector(BaseConnector):
         for action_result in action_results:
             self.add_action_result(action_result)
 
-        return self.get_status()
+        return action_results.get_status()
 
 
 if __name__ == '__main__':
