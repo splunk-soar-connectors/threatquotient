@@ -1,4 +1,4 @@
-###########################################################################################################
+
 # File: threatq_consts.py
 #
 # ThreatQuotient Proprietary and Confidential
@@ -22,7 +22,6 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
-###########################################################################################################
 
 
 THREATQ_NO_DATA = "ThreatQ found no results"

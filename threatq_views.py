@@ -1,4 +1,4 @@
-###########################################################################################################
+
 # File: threatq_views.py
 #
 # ThreatQuotient Proprietary and Confidential
@@ -22,7 +22,7 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
-###########################################################################################################
+
 
 from api.tq_mappings import object_types
 

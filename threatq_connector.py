@@ -1,4 +1,4 @@
-###########################################################################################################
+
 # File: threatq_connector.py
 #
 # ThreatQuotient Proprietary and Confidential
@@ -22,7 +22,7 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
-###########################################################################################################
+
 
 import json
 import os
@@ -1611,7 +1611,6 @@ class ThreatQConnector(BaseConnector):
             msg = '{} -- {}'.format(error_msg, traceback.format_exc())
             self.debug_print(msg)
 
-            # action_results = ActionResult(dict(params))
             return action_results.set_status(phantom.APP_ERROR, error_msg)
 
         if not isinstance(action_results, list):
