@@ -2,7 +2,7 @@
 # File: threatq_connector.py
 #
 # ThreatQuotient Proprietary and Confidential
-# Copyright (c) 2016-2021 ThreatQuotient, Inc. All rights reserved.
+# Copyright (c) 2016-2022 ThreatQuotient, Inc. All rights reserved.
 #
 # NOTICE: All information contained herein, is, and remains the property of ThreatQuotient, Inc.
 # The intellectual and technical concepts contained herein are proprietary to ThreatQuotient, Inc.
@@ -1554,6 +1554,7 @@ class ThreatQConnector(BaseConnector):
         return results
 
     def handle_action(self, params):
+
         """
         Dispatches Phantom actions to the correct handler
 
@@ -1562,7 +1563,6 @@ class ThreatQConnector(BaseConnector):
         """
 
         status = phantom.APP_SUCCESS
-        action_results = self.add_action_result(ActionResult(params))
 
         # Get the action that we are supposed to execute for this App Run
         action_id = self.get_action_identifier()
@@ -1595,12 +1595,13 @@ class ThreatQConnector(BaseConnector):
             error_msg = unquote_plus(self._get_error_message_from_exception(e))
             msg = '{} -- {}'.format(error_msg, traceback.format_exc())
             self.debug_print(msg)
-            return action_results.set_status(phantom.APP_ERROR, THREATQ_ERR_CONNECTIVITY_TEST.format(error=error_msg))
+            action_result = self.add_action_result(ActionResult(dict(params)))
+            return action_result.set_status(phantom.APP_ERROR, THREATQ_ERR_CONNECTIVITY_TEST.format(error=error_msg))
 
         # Get the action
         action = self.action_map.get(action_id)
         if not action:
-            return action_results.set_status(
+            return self.set_status(
                 phantom.APP_ERROR, "No action handler associated with action [{}]".format(action_id))
 
         try:
@@ -1611,7 +1612,8 @@ class ThreatQConnector(BaseConnector):
             msg = '{} -- {}'.format(error_msg, traceback.format_exc())
             self.debug_print(msg)
 
-            return action_results.set_status(phantom.APP_ERROR, error_msg)
+            action_results = ActionResult(dict(params))
+            action_results.set_status(phantom.APP_ERROR, error_msg)
 
         if not isinstance(action_results, list):
             action_results = [action_results]
@@ -1620,7 +1622,7 @@ class ThreatQConnector(BaseConnector):
         for action_result in action_results:
             self.add_action_result(action_result)
 
-        return action_results.get_status()
+        return self.get_status()
 
 
 if __name__ == '__main__':

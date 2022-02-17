@@ -13,7 +13,7 @@ Integrates a variety of ThreatQ services into Splunk SOAR
 [comment]: # " File: readme.md"
 [comment]: # ""
 [comment]: # "    ThreatQuotient Proprietary and Confidential"
-[comment]: # "    Copyright (c) 2016-2021 ThreatQuotient, Inc. All rights reserved."
+[comment]: # "    Copyright (c) 2016-2022 ThreatQuotient, Inc. All rights reserved."
 [comment]: # ""
 [comment]: # "    NOTICE: All information contained herein, is, and remains the property of ThreatQuotient, Inc."
 [comment]: # "    The intellectual and technical concepts contained herein are proprietary to ThreatQuotient, Inc."
