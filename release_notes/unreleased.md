@@ -1,1 +1,3 @@
 **Unreleased**
+* Fixed unwanted FQDN indicators creation when a parsed URL does not have a URL path
+* Fixed miscellaneous JSON and documentation issues

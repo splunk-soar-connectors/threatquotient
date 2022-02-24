@@ -17,11 +17,12 @@
 
 import json
 import re
-
 from copy import copy
+
 from six import string_types
+
 from .indicator_parser import IndicatorParser
-from .tq_mappings import statused_objects, threatq_objects, typed_objects, object_types
+from .tq_mappings import object_types, statused_objects, threatq_objects, typed_objects
 
 
 class Utils(object):
@@ -242,10 +243,10 @@ class Utils(object):
 
         for obj in threatq_objects:
             if (
-                Utils.flatten_string(name) == Utils.flatten_string(obj['display_name']) or
-                Utils.flatten_string(name) == Utils.flatten_string(obj['name']) or
-                Utils.flatten_string(name) == Utils.flatten_string(obj['display_name_plural']) or
-                Utils.flatten_string(name) == Utils.flatten_string(obj['collection'])
+                Utils.flatten_string(name) == Utils.flatten_string(obj['display_name'])
+                or Utils.flatten_string(name) == Utils.flatten_string(obj['name']) # noqa
+                or Utils.flatten_string(name) == Utils.flatten_string(obj['display_name_plural']) # noqa
+                or Utils.flatten_string(name) == Utils.flatten_string(obj['collection']) # noqa
             ):
                 return obj
         return {}
@@ -313,8 +314,8 @@ class Utils(object):
         matched = None
         for user in tq_users:
             if (
-                Utils.flatten_string(assignee) == Utils.flatten_string(user['display_name']) or
-                Utils.flatten_string(assignee) == Utils.flatten_string(user['email'])
+                Utils.flatten_string(assignee) == Utils.flatten_string(user['display_name'])
+                or Utils.flatten_string(assignee) == Utils.flatten_string(user['email']) # noqa
             ):
                 matched = user
                 break
