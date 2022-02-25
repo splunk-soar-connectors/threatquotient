@@ -1,8 +1,8 @@
-###########################################################################################################
+
 # File: threatq_connector.py
 #
 # ThreatQuotient Proprietary and Confidential
-# Copyright (c) 2016-2021 ThreatQuotient, Inc. All rights reserved.
+# Copyright (c) 2016-2022 ThreatQuotient, Inc.
 #
 # NOTICE: All information contained herein, is, and remains the property of ThreatQuotient, Inc.
 # The intellectual and technical concepts contained herein are proprietary to ThreatQuotient, Inc.
@@ -12,23 +12,31 @@
 # Dissemination of this information or reproduction of this material is strictly forbidden unless prior
 # written permission is obtained from ThreatQuotient, Inc.
 #
-# Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt)
-###########################################################################################################
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific language governing permissions
+# and limitations under the License.
+
 
 import json
 import os
-import requests
 import traceback
-
 from datetime import datetime
-from dateutil.parser import parse as parse_date
 from urllib.parse import unquote_plus
 
 # Phantom imports
 import phantom.app as phantom
+import phantom.rules as ph_rules
+import requests
+from dateutil.parser import parse as parse_date
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
-import phantom.rules as ph_rules
 
 # ThreatQ imports
 from api import Utils
@@ -619,7 +627,10 @@ class ThreatQConnector(BaseConnector):
             with open(file_path, 'r') as f:
                 file_text = f.read()
         except Exception:
-            self.debug_print("Error occurred while reading the file in text mode ('r'). Hence, switching to binary mode ('rb') to read the contents of file.")
+            self.debug_print(
+                "Error occurred while reading the file in text mode ('r'). Hence, "
+                "switching to binary mode ('rb') to read the contents of file."
+            )
             with open(file_path, 'rb') as f:
                 file_text = f.read()
 
@@ -915,7 +926,9 @@ class ThreatQConnector(BaseConnector):
                 self.tq.post('/api/investigations/{}/nodes'.format(res['id']), data=data)
             except Exception as e:
                 error_msg = self._get_error_message_from_exception(e)
-                msg = '{}. {} -- {}'.format(THREATQ_ERR_RELATE_INDICATOR_TO_INVESTIGATION.format(ind), error_msg, traceback.format_exc())
+                msg = '{}. {} -- {}'.format(
+                    THREATQ_ERR_RELATE_INDICATOR_TO_INVESTIGATION.format(ind), error_msg, traceback.format_exc()
+                )
                 self.debug_print(msg)
                 failed_count += 1
 
@@ -1541,6 +1554,7 @@ class ThreatQConnector(BaseConnector):
         return results
 
     def handle_action(self, params):
+
         """
         Dispatches Phantom actions to the correct handler
 
@@ -1581,7 +1595,8 @@ class ThreatQConnector(BaseConnector):
             error_msg = unquote_plus(self._get_error_message_from_exception(e))
             msg = '{} -- {}'.format(error_msg, traceback.format_exc())
             self.debug_print(msg)
-            return self.set_status(phantom.APP_ERROR, THREATQ_ERR_CONNECTIVITY_TEST.format(error=error_msg))
+            action_result = self.add_action_result(ActionResult(dict(params)))
+            return action_result.set_status(phantom.APP_ERROR, THREATQ_ERR_CONNECTIVITY_TEST.format(error=error_msg))
 
         # Get the action
         action = self.action_map.get(action_id)
@@ -1612,8 +1627,9 @@ class ThreatQConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import pudb
     import argparse
+
+    import pudb
 
     pudb.set_trace()
 

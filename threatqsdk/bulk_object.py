@@ -17,10 +17,10 @@
 
 import logging
 import math
-
 from random import randint
-from six import string_types
 from time import sleep
+
+from six import string_types
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -345,9 +345,9 @@ class ThreatQObject(object):
                 for item in res:
                     for obj in objects:
                         if (
-                            obj.name and obj.name == item.get('name') or
-                            obj.value and obj.value == item.get('value') or
-                            obj.title and obj.title == item.get('title')
+                            obj.name and obj.name == item.get('name')
+                            or obj.value and obj.value == item.get('value') # noqa
+                            or obj.title and obj.title == item.get('title') # noqa
                         ):
                             obj._set_id(item.get('id'))
                             break
