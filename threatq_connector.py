@@ -74,7 +74,8 @@ class ThreatQConnector(BaseConnector):
             'upload_file': self.create_file,
             'set_indicator_status': self.set_indicator_status,
             'add_attribute': self.add_attribute,
-            'get_related_objects': self.get_related_objects
+            'get_related_objects': self.get_related_objects,
+            'create_signature': self.create_signature
         }
 
     def _get_error_message_from_exception(self, e):
@@ -1360,6 +1361,68 @@ class ThreatQConnector(BaseConnector):
             results.append(action_result)
 
         return results
+
+    def create_signature(self, params):
+        """
+        Action to create a signature in ThreatQ
+
+        Parameters:
+            - params (dict): Parameters from Phantom
+
+        Returns: Action result
+        """
+
+        # Create action result
+        action_result = ActionResult(dict(params))
+
+        action_result.set_status(phantom.APP_ERROR, "Robert Status")
+
+        # Get container info
+        _, container_info, _ = self.get_container_info()
+        tlp = container_info.get('sensitivity')
+
+        # Get the passed items
+        signature = {
+            'name': params['signature_name'],
+            'value': params['signature_value'],
+            'type': params['signature_type'],
+            'status': params.get('signature_status', self.default_status)
+        }
+
+        # Build new source with TLP
+        source_obj = ThreatQSource("Phantom", tlp=tlp)
+
+        # Build out the signature
+        self.save_progress("Building signature to upload to ThreatQ")
+
+        sig = ThreatQObject(self.tq, 'signatures')
+        sig.fill_from_api_response(signature)
+        sig.add_source(source_obj)
+
+        # Upload signature
+        self.save_progress("Uploading signature to ThreatQ")
+        try:
+            sig.upload()
+        except Exception as e:
+            error_msg = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            self.debug_print(msg)
+            action_result.set_status(phantom.APP_ERROR, "{}. {}".format(THREATQ_ERR_UPLOAD_SIGNATURE, error_msg))
+            return action_result
+
+        if not sig.oid:
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERR_UPLOAD_SIGNATURE)
+            return action_result
+        else:
+            action_result.set_status(phantom.APP_SUCCESS, "Successfully uploaded signature to ThreatQ")
+
+        # Add data and summary to output result
+        output = sig._to_dict(for_api=False)
+        action_result.update_summary({"total": 1, "results": [Utils.generate_summary(output)]})
+        output.update({'host': self.tq.threatq_host})
+        action_result.add_data(output)
+
+        return action_result
 
     def set_indicator_status(self, params):
         """
