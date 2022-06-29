@@ -146,7 +146,7 @@ See *Details \> Formatting an Indicator List*
 **Formatting:**  
 See *Details \> Formatting an Indicator List*
 
-### <span id="Create_Spearphish_101"></span> Create Spearphish
+### <span id="Upload_Spearphish_101"></span> Upload Spearphish
 
 **Name:** upload_spearphish
 

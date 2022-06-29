@@ -68,10 +68,10 @@ class ThreatQConnector(BaseConnector):
             'create_task': self.create_task,
             'create_adversaries': self.create_adversaries,
             'create_event': self.create_event,
-            'upload_spearphish': self.create_spearphish,
+            'upload_spearphish': self.upload_spearphish,
             'create_custom_objects': self.create_custom_objects,
             'start_investigation': self.start_investigation,
-            'upload_file': self.create_file,
+            'upload_file': self.upload_file,
             'set_indicator_status': self.set_indicator_status,
             'add_attribute': self.add_attribute,
             'get_related_objects': self.get_related_objects,
@@ -579,7 +579,7 @@ class ThreatQConnector(BaseConnector):
         action_result.set_status(phantom.APP_SUCCESS, "Successfully uploaded event to ThreatQ")
         return action_result
 
-    def create_spearphish(self, params):
+    def upload_spearphish(self, params):
         """
         Action to create a spearphish event in ThreatQ
 
@@ -699,7 +699,7 @@ class ThreatQConnector(BaseConnector):
         action_result.set_status(phantom.APP_SUCCESS, "Successfully uploaded spearphish event to ThreatQ")
         return action_result
 
-    def create_file(self, params):
+    def upload_file(self, params):
         """
         Action to create a file in ThreatQ
 
