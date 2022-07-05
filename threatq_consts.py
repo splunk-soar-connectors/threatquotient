@@ -62,6 +62,7 @@ THREATQ_ERR_RELATE_INDICATORS_TO_TASK = "Error occurred while relating indicator
                                         "No indicator was successfully linked with the task."
 THREATQ_ERR_RELATE_CONTAINER_EVENT_TO_TASK = "Error occurred while relating container event to the task. {error}"
 THREATQ_ERR_UPLOAD_EVENT = "Failed to upload event to ThreatQ"
+THREATQ_ERR_UPLOAD_SIGNATURE = "Failed uploading signature to ThreatQ"
 THREATQ_ERR_CREATE_INVESTIGATION = "Failed to create investigation"
 THREATQ_ERR_RELATE_INDICATOR_TO_INVESTIGATION = "Error occurred while linking the indicator {} to the investigation"
 THREATQ_ERR_RELATE_INDICATORS_TO_INVESTIGATION = "Error occurred while linking indicators as nodes to the investigation. "\
