@@ -2,11 +2,11 @@
 # ThreatQ
 
 Publisher: ThreatQuotient  
-Connector Version: 2\.1\.0  
+Connector Version: 2\.2\.0  
 Product Vendor: ThreatQuotient  
 Product Name: ThreatQ  
 Product Version Supported (regex): "4\.\*"  
-Minimum Product Version: 5\.1\.0  
+Minimum Product Version: 5\.2\.0  
 
 Integrates a variety of ThreatQ services into Splunk SOAR
 
@@ -275,6 +275,8 @@ N/A
 
 ## <span id="Changelog_212"></span> Changelog
 
+-   Version 2.2.0
+    -   Adds create signature action
 -   Version 2.1.x
     -   Fixed unwanted FQDN indicators creation when a parsed URL does not have a URL path
     -   Fixed miscellaneous JSON and documentation issues
@@ -328,6 +330,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [upload spearphish](#action-upload-spearphish) - Upload a spearphish attempt to ThreatQ  
 [upload file](#action-upload-file) - Upload \(and parse\) a file to ThreatQ  
 [get related objects](#action-get-related-objects) - Query ThreatQ for an object's relationships  
+[create signature](#action-create-signature) - Create a signature within ThreatQ  
 
 ## action: 'test connectivity'
 Validate the asset configuration for connectivity
@@ -681,5 +684,33 @@ action\_result\.data\.\*\.value | string |
 action\_result\.status | string | 
 action\_result\.message | string | 
 action\_result\.summary\.total | numeric | 
+summary\.total\_objects | numeric | 
+summary\.total\_objects\_successful | numeric |   
+
+## action: 'create signature'
+Create a signature within ThreatQ
+
+Type: **generic**  
+Read only: **False**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**signature\_name** |  required  | The name for the signature uploaded to ThreatQ | string | 
+**signature\_value** |  required  | The value for the signature uploaded to ThreatQ | string | 
+**signature\_type** |  required  | The type for the signature uploaded to ThreatQ | string | 
+**signature\_status** |  required  | The status for the signature uploaded to ThreatQ | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS
+--------- | ---- | --------
+action\_result\.parameter\.signature\_name | string | 
+action\_result\.parameter\.signature\_value | string | 
+action\_result\.parameter\.signature\_type | string | 
+action\_result\.parameter\.signature\_status | string | 
+action\_result\.data | string | 
+action\_result\.status | string | 
+action\_result\.message | string | 
+action\_result\.summary | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric | 
