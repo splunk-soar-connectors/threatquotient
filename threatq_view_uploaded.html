@@ -54,7 +54,11 @@
                             <tr>
                                 <td>
                                     {% if data.value %}
-                                        {{ data.value }}
+                                        {% if ata.api_name == "signatures" and data.name %}
+                                            {{ data.name }}
+                                        {% else %}
+                                            {{ data.value }}
+                                        {% endif %}
                                     {% elif data.name %}
                                         {{ data.name }}
                                     {% elif data.title %}
