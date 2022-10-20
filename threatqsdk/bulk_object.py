@@ -70,6 +70,7 @@ class ThreatQObject(object):
         self.type = None
         self.score = None
         self.sources = []
+        self.tags = []
 
         # Related objects
         self.relationships = {}
@@ -237,9 +238,9 @@ class ThreatQObject(object):
         # Load basic data
         self.api_name = api_response.get('api_name', self.api_name)
         self.oid = api_response.get('id')
-        self.value = api_response.get('value', '')
-        self.name = api_response.get('name', '')
-        self.title = api_response.get('title', '')
+        self.set_value(api_response.get('value', self.value))
+        self.name = api_response.get('name', self.name)
+        self.title = api_response.get('title', self.title)
         self.description = api_response.get('description', '')
         self.happened_at = api_response.get('happened_at')
         self.type_id = api_response.get('type_id')
@@ -272,7 +273,7 @@ class ThreatQObject(object):
 
         # Load relationships
         for item in self.object_list:
-            if item in api_response:
+            if api_response.get(item) and isinstance(api_response[item], list):
                 # Make sure we have a place to store the relationship
                 if item not in self.relationships:
                     self.relationships[item] = []
@@ -283,17 +284,21 @@ class ThreatQObject(object):
                     obj.fill_from_api_response(rel)
                     self.relationships[item].append(obj)
 
+        # Load tags
+        if api_response.get('tags'):
+            self.add_tags(api_response.get('tags', []) or [])
+
         # Load soures
-        for item in api_response.get('sources', []):
+        for item in api_response.get('sources', []) or []:
             self.add_source(item['name'], tlp_id=item.get('tlp_id'), tlp=item.get('tlp'))
-        for item in sources:
+        for item in sources or []:
             if isinstance(item, dict):
                 self.add_source(item['name'], tlp_id=item.get('tlp_id'), tlp=item.get('tlp'))
             else:
                 self.add_source(item)
 
         # Load attributes
-        for item in api_response.get('attributes', []):
+        for item in api_response.get('attributes', []) or []:
             if not item['name'] or not item['value']:  # You wouldn't think this would get hit, but it can
                 continue
 
@@ -310,7 +315,7 @@ class ThreatQObject(object):
             self.add_attribute(item['name'], item['value'], sources=attr_sources, tlp=item.get('tlp'))
 
         # Load comments
-        self.comments = api_response.get('comments', [])
+        self.comments = api_response.get('comments', []) or []
 
         return self
 
@@ -411,6 +416,8 @@ class ThreatQObject(object):
             output['happened_at'] = self.happened_at
         if self.api_name == "indicators" and self.score is not None and 'score' not in ignore and not for_api:
             output['score'] = self.score
+        if self.tags:
+            output['tags'] = self.tags
 
         # Add relationships
         if 'relationships' not in ignore:
@@ -559,7 +566,9 @@ class ThreatQObject(object):
         """
 
         params = {}
-        if self.value:
+        if self.oid:
+            params['id'] = self.oid
+        elif self.value:
             params['value'] = self.value
         elif self.name:
             params['name'] = self.name
@@ -579,8 +588,12 @@ class ThreatQObject(object):
     def add_tag(self, tag_name):
         self.add_tags([tag_name])
 
-    def upload_tags(self, tags):
+    def add_tags(self, tags):
+        for i in tags:
+            if i not in self.tags:
+                self.tags.append(i)
 
+    def upload_tags(self, tags):
         if not self.oid:
             raise Exception('Cannot add tag to a Threat Object without an ID!')
 
