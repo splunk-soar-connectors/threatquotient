@@ -1119,7 +1119,6 @@ class ThreatQConnector(BaseConnector):
         # Get the passed items
         values = params['object_list']
         object_type = params['object_type']
-        to_handle = []
 
         # Make sure the object type is valid
         obj_data = Utils.match_name_to_object(object_type)
