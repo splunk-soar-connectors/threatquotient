@@ -31,9 +31,14 @@ class Utils(object):
     """
 
     object_data = {
+        'id': None,
         'api_name': None,
         'value': None,
-        'type': None
+        'type': None,
+        'attributes': [],
+        'tags': [],
+        'status': None,
+        'description': None
     }
 
     @staticmethod
@@ -66,6 +71,13 @@ class Utils(object):
 
         output = []
         unknown = []
+
+        # If it's an integer, assume it's an ID
+        if Utils.is_int(raw):
+            data = copy(Utils.object_data)
+            data['id'] = int(raw)
+            output.append(data)
+            return output, unknown
 
         # Handle either comma-separated list or line-separated list
         items = [raw]
@@ -102,11 +114,16 @@ class Utils(object):
 
         else:
             for i in items:
-                pair_data = Utils.parse_name_value_pair(i)
-                if pair_data and pair_data['api_name']:
-                    output.append(pair_data)
+                if Utils.is_int(i):
+                    data = copy(Utils.object_data)
+                    data['id'] = int(i)
+                    output.append(data)
                 else:
-                    unknown.append(raw)
+                    pair_data = Utils.parse_name_value_pair(i)
+                    if pair_data and pair_data['api_name']:
+                        output.append(pair_data)
+                    else:
+                        unknown.append(raw)
 
         return output, unknown
 
@@ -204,7 +221,7 @@ class Utils(object):
         if isinstance(data, list):
             # If the data is a list, do some recursion to parse the child dictionaries
             for i in data:
-                r_output, u_output = Utils.parse_agnostic_json(i)
+                r_output, u_output = Utils.parse_agnostic_json(i, use_indicator_parser=use_indicator_parser)
                 output.extend(r_output)
                 unknown.extend(u_output)
         elif isinstance(data, dict):
@@ -212,15 +229,25 @@ class Utils(object):
 
             # Get object metadata (with field fallbacks)
             # This way, we can handle multiple formats for the input JSON
-            obj['api_name'] = data.get('object_name', data.get('object_code', data.get('object', data.get('api_name'))))
-            obj['value'] = data.get('value', data.get('object_value'))
-            obj['type'] = data.get('type', data.get('object_type', data.get('subtype')))
+            obj['id'] = Utils.get_one_of(data, ['id', 'object_id', 'tq_id'])
+            obj['api_name'] = Utils.match_name_to_object(Utils.get_one_of(
+                data, ['object_name', 'object_type', 'object_code', 'collection', 'api_name'])).get('collection')
+            obj['value'] = Utils.get_one_of(data, ['value', 'title', 'name', 'object_value'])
+            obj['type'] = Utils.get_one_of(data, ['type', 'subtype', 'type_name'])
+            obj['tags'] = Utils.get_one_of(data, ['tags'])
+            obj['attributes'] = Utils.get_one_of(data, ['attributes'])
+            obj['status'] = Utils.get_one_of(data, ['status', 'object_status', 'status_name'])
+            obj['description'] = Utils.get_one_of(data, ['description', 'desc'])
 
             # If no API name (object name) or object value is found, add to unknown list
-            if obj['api_name'] and obj['value']:
+            if obj['value'] or obj['id']:
                 output.append(obj)
             else:
                 unknown.append(data)
+        elif isinstance(data, int):
+            obj = copy(Utils.object_data)
+            obj['id'] = data
+            output.append(obj)
         elif isinstance(data, string_types):
             s_known, s_unknown = Utils.parse_agnostic_string(data, use_indicator_parser)
             output.extend(s_known)
@@ -488,6 +515,24 @@ class Utils(object):
         return output
 
     @staticmethod
+    def get_one_of(data, keys):
+        """
+        Gets the first value from a list of keys from a dictionary
+
+        Parameters:
+            - data (dict): The dictionary to search
+            - keys (list): A list of keys to search for
+
+        Returns: The first value found in the dictionary
+        """
+
+        for key in keys:
+            if key in data:
+                return data[key]
+
+        return None
+
+    @staticmethod
     def is_url(value):
         """
         Checks if a value is a URL or Domain
@@ -523,8 +568,32 @@ class Utils(object):
         Returns: True or False
         """
 
+        if isinstance(raw, list) or isinstance(raw, dict):
+            return True
+
         try:
             json.loads(raw)
+        except Exception:
+            return False
+
+        return True
+
+    @staticmethod
+    def is_int(raw):
+        """
+        Checks if a given input is a number
+
+        Parameters:
+            - raw (?): An unstructured and unknown input
+
+        Returns: True or False
+        """
+
+        if isinstance(raw, int):
+            return True
+
+        try:
+            int(raw)
         except Exception:
             return False
 

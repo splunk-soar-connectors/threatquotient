@@ -5,6 +5,9 @@
     "publisher": "ThreatQuotient",
     "contributors": [
         {
+            "name": "Zach Shames"
+        },
+        {
             "name": "Emanuel Rodrigues"
         },
         {
@@ -15,12 +18,12 @@
     "type": "information",
     "license": "Copyright (c) 2016-2022 ThreatQuotient, Inc.",
     "main_module": "threatq_connector.py",
-    "app_version": "2.2.0",
+    "app_version": "2.3.0",
     "utctime_updated": "2022-01-07T20:50:24.000000Z",
     "product_vendor": "ThreatQuotient",
     "product_name": "ThreatQ",
     "product_version_regex": "4.*",
-    "min_phantom_version": "5.2.0",
+    "min_phantom_version": "5.3.0",
     "logo": "logo_threatq.svg",
     "logo_dark": "logo_threatq_dark.svg",
     "python_version": "3",
@@ -629,6 +632,234 @@
                 },
                 {
                     "data_path": "action_result.parameter.attribute_value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.object_list",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.object_type",
+                    "data_type": "string",
+                    "example_values": [
+                        "Identity"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.total",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "add comment",
+            "description": "Adds a comment to objects in ThreatQ",
+            "type": "generic",
+            "identifier": "add_comment",
+            "read_only": false,
+            "parameters": {
+                "object_list": {
+                    "description": "A comma-separated or line-separated list of object values",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 0
+                },
+                "object_type": {
+                    "description": "The object type of the specified list values",
+                    "data_type": "string",
+                    "value_list": [
+                        "Adversary",
+                        "Attack Pattern",
+                        "Campaign",
+                        "Course of Action",
+                        "Event",
+                        "Exploit Target",
+                        "Identity",
+                        "Incident",
+                        "Indicator",
+                        "Intrusion Set",
+                        "Malware",
+                        "Report",
+                        "Tool",
+                        "TTP",
+                        "Vulnerability"
+                    ],
+                    "required": true,
+                    "order": 1
+                },
+                "comment": {
+                    "description": "The comment to add to the objects",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 2
+                }
+            },
+            "render": {
+                "type": "custom",
+                "width": 12,
+                "height": 12,
+                "view": "threatq_views.render_uploaded",
+                "title": "ThreatQ Action Results"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.comment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.object_list",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.object_type",
+                    "data_type": "string",
+                    "example_values": [
+                        "Identity"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.value",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.total",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "add tag",
+            "description": "Adds a tag to objects in ThreatQ",
+            "type": "generic",
+            "identifier": "add_tag",
+            "read_only": false,
+            "parameters": {
+                "object_list": {
+                    "description": "A comma-separated or line-separated list of object values",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 0
+                },
+                "object_type": {
+                    "description": "The object type of the specified list values",
+                    "data_type": "string",
+                    "value_list": [
+                        "Adversary",
+                        "Attack Pattern",
+                        "Campaign",
+                        "Course of Action",
+                        "Event",
+                        "Exploit Target",
+                        "Identity",
+                        "Incident",
+                        "Indicator",
+                        "Intrusion Set",
+                        "Malware",
+                        "Report",
+                        "Tool",
+                        "TTP",
+                        "Vulnerability"
+                    ],
+                    "required": true,
+                    "order": 1
+                },
+                "tag": {
+                    "description": "The tag to add to the objects",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 2
+                }
+            },
+            "render": {
+                "type": "custom",
+                "width": 12,
+                "height": 12,
+                "view": "threatq_views.render_uploaded",
+                "title": "ThreatQ Action Results"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.tag",
                     "data_type": "string"
                 },
                 {

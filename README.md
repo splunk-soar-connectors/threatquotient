@@ -2,11 +2,11 @@
 # ThreatQ
 
 Publisher: ThreatQuotient  
-Connector Version: 2\.2\.0  
+Connector Version: 2\.3\.0  
 Product Vendor: ThreatQuotient  
 Product Name: ThreatQ  
 Product Version Supported (regex): "4\.\*"  
-Minimum Product Version: 5\.2\.0  
+Minimum Product Version: 5\.3\.0  
 
 Integrates a variety of ThreatQ services into Splunk SOAR
 
@@ -275,24 +275,46 @@ N/A
 
 ## <span id="Changelog_212"></span> Changelog
 
--   Version 2.2.0
-    -   Adds create signature action
--   Version 2.1.x
-    -   Fixed unwanted FQDN indicators creation when a parsed URL does not have a URL path
-    -   Fixed miscellaneous JSON and documentation issues
--   Version 2.0.3
-    -   Rewrite of the app to improve stability, error handling, and input support
-    -   Remove all “reputation” actions, and replaced them with an all-in-one query action
-    -   Adds actions to interact with custom objects
-    -   All response views now share the same template, including tables for attributes and related
-        objects (including custom objects)
-    -   Response data is now better formatted to be used within phantom playbooks to make better
-        decisions
-    -   Querying an indicator will query *all* information about that indicator, including
-        attributes, score, status, and relationships. That information is then made accessible
-        within the conditions block in order to make a decision
--   Version 1.0.0
-    -   Initial release
+Version 2.3.0
+
+Improves parsing & support for other input formats for \`object_list\` parameters:
+
+-   The \`object_list\` parameter can now take ThreatQ IDs (line-separated, comma-separated, JSON
+    List, or JSON Dict)
+-   The \`object_list\` parameter now supports Event object types better
+-   Improves IOC parser
+
+Fixes issue adding attributes to events
+
+Adds \`add tag\` action
+
+Adds \`add comment\` action
+
+Version 2.2.0
+
+-   Adds create signature action
+
+Version 2.1.x
+
+-   Fixed unwanted FQDN indicators creation when a parsed URL does not have a URL path
+-   Fixed miscellaneous JSON and documentation issues
+
+Version 2.0.3
+
+-   Rewrite of the app to improve stability, error handling, and input support
+-   Remove all “reputation” actions, and replaced them with an all-in-one query action
+-   Adds actions to interact with custom objects
+-   All response views now share the same template, including tables for attributes and related
+    objects (including custom objects)
+-   Response data is now better formatted to be used within phantom playbooks to make better
+    decisions
+-   Querying an indicator will query *all* information about that indicator, including attributes,
+    score, status, and relationships. That information is then made accessible within the conditions
+    block in order to make a decision
+
+Version 1.0.0
+
+-   Initial release
 
 ## Port Information
 
@@ -323,6 +345,8 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [create adversaries](#action-create-adversaries) - Create adversaries within ThreatQ  
 [create custom objects](#action-create-custom-objects) - Create custom objects within ThreatQ  
 [add attribute](#action-add-attribute) - Adds an attribute to objects in ThreatQ  
+[add comment](#action-add-comment) - Adds a comment to objects in ThreatQ  
+[add tag](#action-add-tag) - Adds a tag to objects in ThreatQ  
 [set indicator status](#action-set-indicator-status) - Set a status for a given list of indicators  
 [create task](#action-create-task) - Create a task within ThreatQ  
 [create event](#action-create-event) - Create an event within ThreatQ  
@@ -481,6 +505,62 @@ DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
 action\_result\.parameter\.attribute\_name | string | 
 action\_result\.parameter\.attribute\_value | string | 
+action\_result\.parameter\.object\_list | string | 
+action\_result\.parameter\.object\_type | string | 
+action\_result\.data\.\*\.name | string | 
+action\_result\.data\.\*\.title | string | 
+action\_result\.data\.\*\.value | string | 
+action\_result\.status | string | 
+action\_result\.message | string | 
+action\_result\.summary\.total | numeric | 
+summary\.total\_objects | numeric | 
+summary\.total\_objects\_successful | numeric |   
+
+## action: 'add comment'
+Adds a comment to objects in ThreatQ
+
+Type: **generic**  
+Read only: **False**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**object\_list** |  required  | A comma\-separated or line\-separated list of object values | string | 
+**object\_type** |  required  | The object type of the specified list values | string | 
+**comment** |  required  | The comment to add to the objects | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS
+--------- | ---- | --------
+action\_result\.parameter\.comment | string | 
+action\_result\.parameter\.object\_list | string | 
+action\_result\.parameter\.object\_type | string | 
+action\_result\.data\.\*\.name | string | 
+action\_result\.data\.\*\.title | string | 
+action\_result\.data\.\*\.value | string | 
+action\_result\.status | string | 
+action\_result\.message | string | 
+action\_result\.summary\.total | numeric | 
+summary\.total\_objects | numeric | 
+summary\.total\_objects\_successful | numeric |   
+
+## action: 'add tag'
+Adds a tag to objects in ThreatQ
+
+Type: **generic**  
+Read only: **False**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**object\_list** |  required  | A comma\-separated or line\-separated list of object values | string | 
+**object\_type** |  required  | The object type of the specified list values | string | 
+**tag** |  required  | The tag to add to the objects | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS
+--------- | ---- | --------
+action\_result\.parameter\.tag | string | 
 action\_result\.parameter\.object\_list | string | 
 action\_result\.parameter\.object\_type | string | 
 action\_result\.data\.\*\.name | string | 

@@ -45,6 +45,12 @@ from threatq_consts import *
 from threatqsdk import Event, File, Threatq, ThreatQAttribute, ThreatQObject, ThreatQSource
 
 
+class ObjectContextType:
+    ATTRIBUTE = "attribute"
+    COMMENT = "comment"
+    TAG = "tag"
+
+
 class ThreatQConnector(BaseConnector):
     """
     A ThreatQ connector for Phantom
@@ -63,19 +69,26 @@ class ThreatQConnector(BaseConnector):
 
         # Create action mapping
         self.action_map = {
+            # Object Fetching
             'query_indicators': self.query_indicators,
+            'get_related_objects': self.get_related_objects,
+
+            # Object Creation
+            'create_custom_objects': self.create_custom_objects,
+            'create_signature': self.create_signature,
             'create_indicators': self.create_indicators,
             'create_task': self.create_task,
             'create_adversaries': self.create_adversaries,
             'create_event': self.create_event,
             'upload_spearphish': self.upload_spearphish,
-            'create_custom_objects': self.create_custom_objects,
-            'start_investigation': self.start_investigation,
             'upload_file': self.upload_file,
-            'set_indicator_status': self.set_indicator_status,
+            'start_investigation': self.start_investigation,
+
+            # Add/Set Contextual Information
             'add_attribute': self.add_attribute,
-            'get_related_objects': self.get_related_objects,
-            'create_signature': self.create_signature
+            'add_comment': self.add_comment,
+            'add_tag': self.add_tag,
+            'set_indicator_status': self.set_indicator_status,
         }
 
     def _get_error_message_from_exception(self, e):
@@ -134,6 +147,31 @@ class ThreatQConnector(BaseConnector):
             self.save_progress(THREATQ_ERR_CONNECTIVITY_TEST.format(error=error_msg))
             return action_result.set_status(phantom.APP_ERROR)
 
+    def get_source_obj(self, tlp):
+        return ThreatQSource("Phantom", tlp=tlp)
+
+    def get_input_objects(self, values, global_type):
+        # Convert input to a list
+        found, unknown = Utils.parse_agnostic_input(values, global_type == "indicators")
+
+        # If it's an object that only takes a single value field, add in the unknowns.
+        # Events don't count because we imply the type, "Incident"
+        if global_type not in ["indicators", "signatures"]:
+            identifier = "value"
+            if global_type == "adversaries":
+                identifier = "name"
+            elif global_type == "events":
+                identifier = "title"
+            unknown = [{identifier: val} for val in unknown if val]
+
+        # Inject the collection into the objects if they don't already have one
+        to_handle = found + unknown
+        for i in to_handle:
+            if not i.get('api_name'):
+                i['api_name'] = global_type
+
+        return to_handle
+
     def query_indicators(self, params):
         """
         Action to query ThreatQ for indicator matches
@@ -164,7 +202,6 @@ class ThreatQConnector(BaseConnector):
 
         results = []
         for index, item in enumerate(items):
-
             # Add action results
             action_result = ActionResult(dict(params))
 
@@ -405,7 +442,8 @@ class ThreatQConnector(BaseConnector):
                 self.tq.post("{}/tasks".format(i._get_api_endpoint()), data=[{'id': res['id']}])
             except Exception as e:
                 error_msg = self._get_error_message_from_exception(e)
-                msg = '{}. {} -- {}'.format(THREATQ_ERR_RELATE_INDICATOR_TO_TASK.format(i), error_msg, traceback.format_exc())
+                msg = '{}. {} -- {}'.format(
+                    THREATQ_ERR_RELATE_INDICATOR_TO_TASK.format(i), error_msg, traceback.format_exc())
                 self.debug_print(msg)
                 failed_count += 1
 
@@ -490,7 +528,7 @@ class ThreatQConnector(BaseConnector):
             error_msg = self._get_error_message_from_exception(e)
             msg = '{} -- {}'.format(error_msg, traceback.format_exc())
             self.debug_print("Error occurred while parsing start time. {}".format(msg))
-            start_time = None
+            start_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
         # Event Attributes
         try:
@@ -1069,19 +1107,18 @@ class ThreatQConnector(BaseConnector):
         _, container_info, _ = self.get_container_info()
         tlp = container_info.get('sensitivity')
 
-        # Get the passed items
-        values = params['object_list']
-        object_type = params['object_type']
-
-        # Convert input to a list
         try:
-            items = self.get_value_list(values)
+            start_time = parse_date(container_info['start_time'])
+            start_time = datetime.strftime(start_time, '%Y-%m-%d %H:%M:%S')
         except Exception as e:
             error_msg = self._get_error_message_from_exception(e)
             msg = '{} -- {}'.format(error_msg, traceback.format_exc())
-            self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERR_PARSE_OBJECT_LIST.format(error=error_msg))
-            return action_result
+            self.debug_print("Error occurred while parsing start time. {}".format(msg))
+            start_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+
+        # Get the passed items
+        values = params['object_list']
+        object_type = params['object_type']
 
         # Make sure the object type is valid
         obj_data = Utils.match_name_to_object(object_type)
@@ -1089,48 +1126,58 @@ class ThreatQConnector(BaseConnector):
             action_result.set_status(phantom.APP_ERROR, "Invalid object type provided!")
             return action_result
 
-        self.save_progress("Creating [{}] {} in ThreatQ".format(len(items), obj_data.get('display_name_plural')))
-
-        # Build new source with TLP
-        source_obj = ThreatQSource("Phantom", tlp=tlp)
-
-        objects = []
-        for item in items:
-            obj = ThreatQObject(self.tq, obj_data.get('collection'))
-            if obj_data.get('collection') == "indicators":
-                try:
-                    found, unknown = Utils.parse_agnostic_input(item)
-                except Exception as e:
-                    error_msg = self._get_error_message_from_exception(e)
-                    msg = '{} -- {}'.format(error_msg, traceback.format_exc())
-                    self.debug_print(msg)
-                    found = []
-
-                if found:
-                    obj.fill_from_api_response(found[0])
-                    obj.status = self.default_status
-            else:
-                obj.set_value(item)
-            obj.add_source(source_obj)
-            objects.append(obj)
-
+        # Get the passed items
         try:
-            ThreatQObject.bulk_upload(self.tq, objects)
+            to_handle = self.get_input_objects(values, obj_data.get('collection'))
         except Exception as e:
             error_msg = self._get_error_message_from_exception(e)
             msg = '{} -- {}'.format(error_msg, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERR_BULK_UPLOAD.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERR_PARSE_OBJECT_LIST.format(error=error_msg))
             return action_result
 
-        uploaded = [ind for ind in objects if ind.oid]
-        msg = "Successfully uploaded [{}] {}".format(len(uploaded), obj_data.get('display_name_plural'))
+        self.save_progress("Creating [{}] objects in ThreatQ".format(len(to_handle)))
+
+        # Build new source with TLP
+        source_obj = ThreatQSource("Phantom", tlp=tlp)
+
+        objects = {}
+        for item in to_handle:
+            obj = ThreatQObject(self.tq, item['api_name'])
+            obj.fill_from_api_response(item)
+
+            # Set any default/required values
+            if obj.api_name == "indicators":
+                obj.status = self.default_status
+            if obj.api_name == "events":
+                obj.happened_at = start_time
+                if not obj.type:
+                    obj.type = 'Incident'
+
+            obj.add_source(source_obj)
+
+            if obj.api_name not in objects:
+                objects[obj.api_name] = []
+            objects[obj.api_name].append(obj)
+
+        # Upload the objects
+        uploaded = []
+        for objs in objects.values():
+            try:
+                ThreatQObject.bulk_upload(self.tq, objs)
+            except Exception as e:
+                error_msg = self._get_error_message_from_exception(e)
+                msg = '{} -- {}'.format(THREATQ_ERR_BULK_UPLOAD.format(error=error_msg), traceback.format_exc())
+                self.debug_print(msg)
+                continue
+
+            uploaded.extend([u_obj for u_obj in objs if u_obj.oid])
+            self.save_progress("Successfully uploaded [{}] {} objects".format(len(uploaded), objs[0].api_name))
 
         # Create action result summary
         action_result.update_summary({"total": len(uploaded)})
 
         # Save progress
-        self.save_progress(msg)
         if len(uploaded) == 0:
             action_result.set_status(
                 phantom.APP_ERROR, "No {} created in ThreatQ".format(obj_data.get('display_name_plural')))
@@ -1158,6 +1205,52 @@ class ThreatQConnector(BaseConnector):
         Returns: Action result
         """
 
+        def cb(obj, values, source):
+            obj.add_attribute(ThreatQAttribute(values['attribute_name'], values['attribute_value'], sources=source))
+
+        return self.add_context(params, ObjectContextType.ATTRIBUTE, cb)
+
+    def add_tag(self, params):
+        """
+        Action to add a tag to objects in ThreatQ
+
+        Parameters:
+            - params (dict): Parameters from Phantom
+
+        Returns: Action result
+        """
+
+        def cb(obj, values, _):
+            obj.add_tag(values[ObjectContextType.TAG])
+
+        return self.add_context(params, ObjectContextType.TAG, cb)
+
+    def add_comment(self, params):
+        """
+        Action to add a comment to objects in ThreatQ
+
+        Parameters:
+            - params (dict): Parameters from Phantom
+
+        Returns: Action result
+        """
+
+        def cb(obj, values, _):
+            obj.add_comment(values[ObjectContextType.COMMENT])
+
+        return self.add_context(params, ObjectContextType.COMMENT, cb)
+
+    def add_context(self, params, context_type, context_cb):
+        """
+        Action to add context to objects in ThreatQ
+
+        Args:
+            params (dict): Parameters from Phantom
+            context_type (ObjectContextType): The type of context to add
+
+        Returns: Action result
+        """
+
         action_result = ActionResult(dict(params))
 
         # Get container info
@@ -1171,16 +1264,20 @@ class ThreatQConnector(BaseConnector):
             error_msg = self._get_error_message_from_exception(e)
             msg = '{} -- {}'.format(error_msg, traceback.format_exc())
             self.debug_print("Error occurred while parsing start time. {}".format(msg))
-            start_time = None
+            start_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
         # Build new source with TLP
-        source_obj = ThreatQSource("Phantom", tlp=tlp)
+        source_obj = self.get_source_obj(tlp)
 
         # Get the passed items
         values = params['object_list']
         object_type = params['object_type']
-        attribute_name = params['attribute_name']
-        attribute_value = params['attribute_value']
+
+        # Load the context values based on the type
+        context_values = {}
+        for key, value in params.items():
+            if key == context_type or key.startswith('{}_'.format(context_type)):
+                context_values[key] = value
 
         # Make sure the object type is valid
         obj_data = Utils.match_name_to_object(object_type)
@@ -1189,8 +1286,9 @@ class ThreatQConnector(BaseConnector):
             return action_result
 
         # Get the passed items
+        to_handle = []
         try:
-            found, unknown = Utils.parse_agnostic_input(values, obj_data.get("collection") == "indicators")
+            to_handle = self.get_input_objects(values, obj_data.get('collection'))
         except Exception as e:
             error_msg = self._get_error_message_from_exception(e)
             msg = '{} -- {}'.format(error_msg, traceback.format_exc())
@@ -1198,26 +1296,31 @@ class ThreatQConnector(BaseConnector):
             action_result.set_status(phantom.APP_ERROR, THREATQ_ERR_PARSE_OBJECT_LIST.format(error=error_msg))
             return action_result
 
-        self.save_progress("Adding attribute to [{}] objects in ThreatQ".format(len(found)))
-
-        # If it's an object that only takes a single value field, add in the unknowns
-        if obj_data.get("collection") not in ["indicators", "signatures", "events"]:
-            identifier = "value"
-            if obj_data.get("collection") == "adversaries":
-                identifier = "name"
-            unknown = [{identifier: val} for val in unknown if val]
+        self.save_progress("Adding {} to [{}] objects in ThreatQ".format(context_type, len(to_handle)))
 
         # Build the objects
         objects = {}
-        for item in found + unknown:
-            obj = ThreatQObject(self.tq, obj_data.get("collection"))
+        for item in to_handle:
+            obj = ThreatQObject(self.tq, item['api_name'])
             obj.fill_from_api_response(item)
-            if obj_data.get("collection") == "indicators":
+
+            # If there is an object ID, fetch the object to fill in the "true" values
+            if obj.oid:
+                obj.find()
+
+            # Set any default/required values
+            if obj.api_name == "indicators":
                 obj.status = self.default_status
-            if obj_data.get("collection") == "events":
+            if obj.api_name == "events":
                 obj.happened_at = start_time
+                if not obj.type:
+                    obj.type = 'Incident'
+
+            # Add the Phantom source
             obj.add_source(source_obj)
-            obj.add_attribute(ThreatQAttribute(attribute_name, attribute_value, sources=source_obj))
+
+            # Add the context based on the callback
+            context_cb(obj, context_values, source_obj)
 
             if obj.api_name not in objects:
                 objects[obj.api_name] = []
@@ -1236,7 +1339,7 @@ class ThreatQConnector(BaseConnector):
 
             uploaded.extend([u_obj for u_obj in objs if u_obj.oid])
 
-        msg = "Successfully added attribute to [{}] objects".format(len(uploaded))
+        msg = "Successfully added {}(s) to [{}] objects".format(context_type, len(uploaded))
 
         # Create action result summary
         action_result.update_summary({"total": len(uploaded)})
@@ -1244,7 +1347,7 @@ class ThreatQConnector(BaseConnector):
         # Save progress
         self.save_progress(msg)
         if len(uploaded) == 0:
-            action_result.set_status(phantom.APP_ERROR, "No attributes created in ThreatQ")
+            action_result.set_status(phantom.APP_ERROR, "No {}(s) created in ThreatQ".format(context_type))
         else:
             action_result.set_status(phantom.APP_SUCCESS, msg)
 
@@ -1492,7 +1595,8 @@ class ThreatQConnector(BaseConnector):
                 self.tq.put(i._get_api_endpoint(), data=payload)
             except Exception as e:
                 error_msg = self._get_error_message_from_exception(e)
-                msg = '{}. {} -- {}'.format(THREATQ_ERR_SET_INDICATOR_STATUS.format(i), error_msg, traceback.format_exc())
+                msg = '{}. {} -- {}'.format(
+                    THREATQ_ERR_SET_INDICATOR_STATUS.format(i), error_msg, traceback.format_exc())
                 self.debug_print(msg)
                 failed_count += 1
 

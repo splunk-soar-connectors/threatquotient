@@ -65,12 +65,16 @@ THREATQ_ERR_UPLOAD_EVENT = "Failed to upload event to ThreatQ"
 THREATQ_ERR_UPLOAD_SIGNATURE = "Failed uploading signature to ThreatQ"
 THREATQ_ERR_CREATE_INVESTIGATION = "Failed to create investigation"
 THREATQ_ERR_RELATE_INDICATOR_TO_INVESTIGATION = "Error occurred while linking the indicator {} to the investigation"
-THREATQ_ERR_RELATE_INDICATORS_TO_INVESTIGATION = "Error occurred while linking indicators as nodes to the investigation. "\
-                                                 "No indicator was successfully linked with the investigation."
-THREATQ_ERR_RELATE_CONTAINER_EVENT_TO_INVESTIGATION = "Error occurred while adding container event to investigation. {error}"
+THREATQ_ERR_RELATE_INDICATORS_TO_INVESTIGATION = (
+    "Error occurred while linking indicators as nodes to the investigation. "
+    "No indicator was successfully linked with the investigation."
+)
+THREATQ_ERR_RELATE_CONTAINER_EVENT_TO_INVESTIGATION = (
+    "Error occurred while adding container event to investigation. {error}")
 THREATQ_ERR_FIND_EVENT = "Error occurred while finding event. {error}"
 THREATQ_ERR_UPLOAD_SPEARPHISH = "Error occurred while uploading spearphish event to ThreatQ. {error}"
-THREATQ_ERR_RELATE_CONTAINER_EVENT_TO_SPEARPHISH = "Error occurred while relating container event to the spearphish event. {error}"
+THREATQ_ERR_RELATE_CONTAINER_EVENT_TO_SPEARPHISH = (
+    "Error occurred while relating container event to the spearphish event. {error}")
 THREATQ_ERR_FIND_FILE = "Error occurred while searching for the file. {error}"
 THREATQ_ERR_UPLOAD_FILE = "Error occurred while uploading file to ThreatQ. {error}"
 THREATQ_ERR_PARSE_FILE = "Error occurred while parsing file for indicators. {error}"
