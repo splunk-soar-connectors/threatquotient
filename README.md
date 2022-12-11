@@ -2,7 +2,7 @@
 # ThreatQ
 
 Publisher: ThreatQuotient  
-Connector Version: 2\.2\.0  
+Connector Version: 2\.3\.1  
 Product Vendor: ThreatQuotient  
 Product Name: ThreatQ  
 Product Version Supported (regex): "4\.\*"  
