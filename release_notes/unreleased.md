@@ -6,4 +6,3 @@
 * Fixes issue adding attributes to events
 * Adds `add tag` action
 * Adds `add comment` action
-
