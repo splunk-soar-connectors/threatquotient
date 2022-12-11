@@ -99,22 +99,22 @@ class ThreatQConnector(BaseConnector):
         :return: error message
         """
         error_code = None
-        error_msg = ERROR_MSG_UNAVAILABLE
+        error_message = ERROR_MESSAGE_UNAVAILABLE
 
         try:
             if hasattr(e, "args"):
                 if len(e.args) > 1:
                     error_code = e.args[0]
-                    error_msg = e.args[1]
+                    error_message = e.args[1]
                 elif len(e.args) == 1:
-                    error_msg = e.args[0]
+                    error_message = e.args[0]
         except:
             pass
 
         if not error_code:
-            error_text = "Error Message: {}".format(error_msg)
+            error_text = "Error Message: {}".format(error_message)
         else:
-            error_text = "Error Code: {}. Error Message: {}".format(error_code, error_msg)
+            error_text = "Error Code: {}. Error Message: {}".format(error_code, error_message)
 
         return error_text
 
@@ -138,13 +138,13 @@ class ThreatQConnector(BaseConnector):
 
         try:
             Threatq(host, auth_data, verify=verify, private=oauth)
-            self.save_progress(THREATQ_SUCC_CONNECTIVITY_TEST)
+            self.save_progress(THREATQ_SUCCESS_CONNECTIVITY_TEST)
             return action_result.set_status(phantom.APP_SUCCESS)
         except Exception as e:
-            error_msg = unquote_plus(self._get_error_message_from_exception(e))
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = unquote_plus(self._get_error_message_from_exception(e))
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            self.save_progress(THREATQ_ERROR_CONNECTIVITY_TEST.format(error=error_msg))
+            self.save_progress(THREATQ_ERROR_CONNECTIVITY_TEST.format(error=error_message))
             return action_result.set_status(phantom.APP_ERROR)
 
     def get_source_obj(self, tlp):
@@ -194,10 +194,10 @@ class ThreatQConnector(BaseConnector):
         try:
             items = self.get_value_list(values)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_INDICATOR_LIST.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_INDICATOR_LIST.format(error=error_message))
             return action_result
 
         results = []
@@ -210,10 +210,10 @@ class ThreatQConnector(BaseConnector):
             try:
                 details = self.query_object_details('indicators', item, exact=exact, relationships=relationships)
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
-                msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+                error_message = self._get_error_message_from_exception(e)
+                msg = '{} -- {}'.format(error_message, traceback.format_exc())
                 self.debug_print(msg)
-                action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_QUERY_OBJECT_DETAILS.format(error=error_msg))
+                action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_QUERY_OBJECT_DETAILS.format(error=error_message))
                 results.append(action_result)
                 continue
 
@@ -232,10 +232,10 @@ class ThreatQConnector(BaseConnector):
             try:
                 action_result = self.set_data_response(action_result, details)
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
-                msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+                error_message = self._get_error_message_from_exception(e)
+                msg = '{} -- {}'.format(error_message, traceback.format_exc())
                 self.debug_print(msg)
-                action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_msg))
+                action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_message))
 
             # Add results
             results.append(action_result)
@@ -266,10 +266,10 @@ class ThreatQConnector(BaseConnector):
         try:
             found, unknown = Utils.parse_agnostic_input(values)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_INDICATOR_LIST.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_INDICATOR_LIST.format(error=error_message))
             return action_result
 
         self.save_progress("Parsed [{}] indicators; Unable to parse [{}] strings".format(len(found), len(unknown)))
@@ -288,10 +288,10 @@ class ThreatQConnector(BaseConnector):
         try:
             ThreatQObject.bulk_upload(self.tq, indicators)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_BULK_UPLOAD.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_BULK_UPLOAD.format(error=error_message))
             return action_result
 
         uploaded = [ind for ind in indicators if ind.oid]
@@ -309,10 +309,10 @@ class ThreatQConnector(BaseConnector):
         try:
             action_result = self.set_data_response(action_result, uploaded)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_message))
 
         return action_result
 
@@ -346,10 +346,10 @@ class ThreatQConnector(BaseConnector):
         try:
             found, unknown = Utils.parse_agnostic_input(values)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_INDICATOR_LIST.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_INDICATOR_LIST.format(error=error_message))
             return action_result
 
         self.save_progress("Parsed [{}] indicators; Unable to parse [{}] strings".format(len(found), len(unknown)))
@@ -367,10 +367,10 @@ class ThreatQConnector(BaseConnector):
         try:
             users = self.tq.get_users(withp='source')
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_GET_USERS.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_GET_USERS.format(error=error_message))
             return action_result
 
         assignee = Utils.match_assignee(assigned_to, users)
@@ -399,10 +399,10 @@ class ThreatQConnector(BaseConnector):
         try:
             res = self.tq.post('/api/tasks', data=data).get('data', {})
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, "{}. {}".format(THREATQ_ERROR_UPLOAD_TASK, error_msg))
+            action_result.set_status(phantom.APP_ERROR, "{}. {}".format(THREATQ_ERROR_UPLOAD_TASK, error_message))
             return action_result
 
         if not res.get('id'):
@@ -424,10 +424,10 @@ class ThreatQConnector(BaseConnector):
         try:
             ThreatQObject.bulk_upload(self.tq, indicators)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_BULK_UPLOAD.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_BULK_UPLOAD.format(error=error_message))
             return action_result
 
         uploaded_inds = [ind for ind in indicators if ind.oid]
@@ -441,9 +441,9 @@ class ThreatQConnector(BaseConnector):
             try:
                 self.tq.post("{}/tasks".format(i._get_api_endpoint()), data=[{'id': res['id']}])
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
+                error_message = self._get_error_message_from_exception(e)
                 msg = '{}. {} -- {}'.format(
-                    THREATQ_ERROR_RELATE_INDICATOR_TO_TASK.format(i), error_msg, traceback.format_exc())
+                    THREATQ_ERROR_RELATE_INDICATOR_TO_TASK.format(i), error_message, traceback.format_exc())
                 self.debug_print(msg)
                 failed_count += 1
 
@@ -459,12 +459,12 @@ class ThreatQConnector(BaseConnector):
         try:
             event.find()
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
             action_result.set_status(
                 phantom.APP_ERROR,
-                THREATQ_ERROR_FIND_EVENT.format(error=error_msg)
+                THREATQ_ERROR_FIND_EVENT.format(error=error_message)
             )
             return action_result
 
@@ -474,11 +474,11 @@ class ThreatQConnector(BaseConnector):
             try:
                 self.tq.post('/api/tasks/{}/events'.format(res['id']), data=data)
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
-                msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+                error_message = self._get_error_message_from_exception(e)
+                msg = '{} -- {}'.format(error_message, traceback.format_exc())
                 self.debug_print(msg)
                 action_result.set_status(
-                    phantom.APP_ERROR, THREATQ_ERROR_RELATE_CONTAINER_EVENT_TO_TASK.format(error=error_msg)
+                    phantom.APP_ERROR, THREATQ_ERROR_RELATE_CONTAINER_EVENT_TO_TASK.format(error=error_message)
                 )
                 return action_result
 
@@ -495,8 +495,8 @@ class ThreatQConnector(BaseConnector):
         action_result.add_data(res)
 
         # Set status and return results
-        action_result.set_status(phantom.APP_SUCCESS, THREATQ_SUCC_UPLOAD_TASK)
-        self.save_progress(THREATQ_SUCC_UPLOAD_TASK)
+        action_result.set_status(phantom.APP_SUCCESS, THREATQ_SUCCESS_UPLOAD_TASK)
+        self.save_progress(THREATQ_SUCCESS_UPLOAD_TASK)
         return action_result
 
     def create_event(self, params):
@@ -525,8 +525,8 @@ class ThreatQConnector(BaseConnector):
             start_time = parse_date(container_info.get('start_time'))
             start_time = datetime.strftime(start_time, '%Y-%m-%d %H:%M:%S')
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print("Error occurred while parsing start time. {}".format(msg))
             start_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
@@ -535,8 +535,8 @@ class ThreatQConnector(BaseConnector):
             due_time = parse_date(container_info.get('due_time'))
             due_time = datetime.strftime(due_time, '%Y-%m-%d %H:%M:%S')
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print("Error occurred while parsing due time. {}".format(msg))
             due_time = None
 
@@ -547,10 +547,10 @@ class ThreatQConnector(BaseConnector):
         try:
             found, unknown = Utils.parse_agnostic_input(values)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_INDICATOR_LIST.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_INDICATOR_LIST.format(error=error_message))
             return action_result
 
         self.save_progress("Parsed [{}] indicators; Unable to parse [{}] strings".format(len(found), len(unknown)))
@@ -575,10 +575,10 @@ class ThreatQConnector(BaseConnector):
         try:
             event.upload()
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, "{}. {}".format(THREATQ_ERROR_UPLOAD_EVENT, error_msg))
+            action_result.set_status(phantom.APP_ERROR, "{}. {}".format(THREATQ_ERROR_UPLOAD_EVENT, error_message))
             return action_result
 
         if not event.oid:
@@ -601,10 +601,10 @@ class ThreatQConnector(BaseConnector):
         try:
             ThreatQObject.bulk_upload(self.tq, indicators)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_BULK_UPLOAD.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_BULK_UPLOAD.format(error=error_message))
             return action_result
 
         # Add data and summary to output result
@@ -644,12 +644,12 @@ class ThreatQConnector(BaseConnector):
             _, _, v_file = ph_rules.vault_info(vault_id=vault_id)
             v_file = list(v_file)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
             action_result.set_status(
                 phantom.APP_ERROR,
-                "Unable to find specified Vault file. Please check Vault ID and try again. {}".format(error_msg)
+                "Unable to find specified Vault file. Please check Vault ID and try again. {}".format(error_message)
             )
             return action_result
 
@@ -686,10 +686,10 @@ class ThreatQConnector(BaseConnector):
         try:
             spearphish.upload(sources=source_obj)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_UPLOAD_SPEARPHISH.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_UPLOAD_SPEARPHISH.format(error=error_message))
             return action_result
 
         # Link the event to the investigation
@@ -702,12 +702,12 @@ class ThreatQConnector(BaseConnector):
             try:
                 self.tq.post('/api/events/{}/events'.format(spearphish.eid), data=data)
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
-                msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+                error_message = self._get_error_message_from_exception(e)
+                msg = '{} -- {}'.format(error_message, traceback.format_exc())
                 self.debug_print(msg)
                 action_result.set_status(
                     phantom.APP_ERROR,
-                    THREATQ_ERROR_RELATE_CONTAINER_EVENT_TO_SPEARPHISH.format(error=error_msg)
+                    THREATQ_ERROR_RELATE_CONTAINER_EVENT_TO_SPEARPHISH.format(error=error_message)
                 )
                 return action_result
 
@@ -724,12 +724,12 @@ class ThreatQConnector(BaseConnector):
             action_result.add_data(data)
             action_result.update_summary(Utils.generate_summary(data))
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
             action_result.set_status(
                 phantom.APP_ERROR,
-                THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_msg)
+                THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_message)
             )
             return action_result
 
@@ -765,12 +765,12 @@ class ThreatQConnector(BaseConnector):
             _, _, v_file = ph_rules.vault_info(vault_id=vault_id)
             v_file = list(v_file)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
             action_result.set_status(
                 phantom.APP_ERROR,
-                "Unable to find specified Vault file. Please check Vault ID and try again. {}".format(error_msg)
+                "Unable to find specified Vault file. Please check Vault ID and try again. {}".format(error_message)
             )
             return action_result
 
@@ -792,10 +792,10 @@ class ThreatQConnector(BaseConnector):
         try:
             tq_file.find()
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_FIND_FILE.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_FIND_FILE.format(error=error_message))
             return action_result
 
         if tq_file.fid:
@@ -805,10 +805,10 @@ class ThreatQConnector(BaseConnector):
             try:
                 tq_file.upload(sources=source_obj)
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
-                msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+                error_message = self._get_error_message_from_exception(e)
+                msg = '{} -- {}'.format(error_message, traceback.format_exc())
                 self.debug_print(msg)
-                action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_UPLOAD_FILE.format(error=error_msg))
+                action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_UPLOAD_FILE.format(error=error_message))
                 return action_result
 
             if parse:
@@ -816,10 +816,10 @@ class ThreatQConnector(BaseConnector):
                 try:
                     tq_file.parse_and_import(source_obj, status=indicator_status)
                 except Exception as e:
-                    error_msg = self._get_error_message_from_exception(e)
-                    msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+                    error_message = self._get_error_message_from_exception(e)
+                    msg = '{} -- {}'.format(error_message, traceback.format_exc())
                     self.debug_print(msg)
-                    action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_FILE.format(error=error_msg))
+                    action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_FILE.format(error=error_message))
                     return action_result
 
         # Link the event to the investigation
@@ -829,10 +829,10 @@ class ThreatQConnector(BaseConnector):
         try:
             event.find()
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_FIND_EVENT.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_FIND_EVENT.format(error=error_message))
             return action_result
 
         if event.oid:
@@ -841,12 +841,12 @@ class ThreatQConnector(BaseConnector):
             try:
                 self.tq.post('/api/attachments/{}/events'.format(tq_file.fid), data=data)
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
-                msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+                error_message = self._get_error_message_from_exception(e)
+                msg = '{} -- {}'.format(error_message, traceback.format_exc())
                 self.debug_print(msg)
                 action_result.set_status(
                     phantom.APP_ERROR,
-                    THREATQ_ERROR_RELATE_CONTAINER_EVENT_TO_FILE.format(error=error_msg)
+                    THREATQ_ERROR_RELATE_CONTAINER_EVENT_TO_FILE.format(error=error_message)
                 )
                 return action_result
 
@@ -895,10 +895,10 @@ class ThreatQConnector(BaseConnector):
         try:
             found, unknown = Utils.parse_agnostic_input(values)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_INDICATOR_LIST.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_INDICATOR_LIST.format(error=error_message))
             return action_result
 
         self.save_progress("Parsed [{}] indicators; Unable to parse [{}] strings".format(len(found), len(unknown)))
@@ -926,10 +926,10 @@ class ThreatQConnector(BaseConnector):
         try:
             ThreatQObject.bulk_upload(self.tq, indicators)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_BULK_UPLOAD.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_BULK_UPLOAD.format(error=error_message))
             return action_result
 
         uploaded_inds = [ind for ind in indicators if ind.oid]
@@ -945,10 +945,10 @@ class ThreatQConnector(BaseConnector):
                 'description': desc
             }).get('data', {})
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, "{}. {}".format(THREATQ_ERROR_CREATE_INVESTIGATION, error_msg))
+            action_result.set_status(phantom.APP_ERROR, "{}. {}".format(THREATQ_ERROR_CREATE_INVESTIGATION, error_message))
             return action_result
 
         # Make sure that it's uploaded
@@ -964,9 +964,9 @@ class ThreatQConnector(BaseConnector):
             try:
                 self.tq.post('/api/investigations/{}/nodes'.format(res['id']), data=data)
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
+                error_message = self._get_error_message_from_exception(e)
                 msg = '{}. {} -- {}'.format(
-                    THREATQ_ERROR_RELATE_INDICATOR_TO_INVESTIGATION.format(ind), error_msg, traceback.format_exc()
+                    THREATQ_ERROR_RELATE_INDICATOR_TO_INVESTIGATION.format(ind), error_message, traceback.format_exc()
                 )
                 self.debug_print(msg)
                 failed_count += 1
@@ -983,12 +983,12 @@ class ThreatQConnector(BaseConnector):
         try:
             event.find()
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
             action_result.set_status(
                 phantom.APP_ERROR,
-                THREATQ_ERROR_FIND_EVENT.format(error=error_msg)
+                THREATQ_ERROR_FIND_EVENT.format(error=error_message)
             )
             return action_result
 
@@ -998,12 +998,12 @@ class ThreatQConnector(BaseConnector):
             try:
                 self.tq.post('/api/investigations/{}/nodes'.format(res['id']), data=data)
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
-                msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+                error_message = self._get_error_message_from_exception(e)
+                msg = '{} -- {}'.format(error_message, traceback.format_exc())
                 self.debug_print(msg)
                 action_result.set_status(
                     phantom.APP_ERROR,
-                    THREATQ_ERROR_RELATE_CONTAINER_EVENT_TO_INVESTIGATION.format(error=error_msg)
+                    THREATQ_ERROR_RELATE_CONTAINER_EVENT_TO_INVESTIGATION.format(error=error_message)
                 )
                 return action_result
 
@@ -1040,10 +1040,10 @@ class ThreatQConnector(BaseConnector):
         try:
             items = self.get_value_list(values)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_ADVERSARY_LIST.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_ADVERSARY_LIST.format(error=error_message))
             return action_result
 
         self.save_progress("Creating [{}] adversaries in ThreatQ".format(len(items)))
@@ -1061,10 +1061,10 @@ class ThreatQConnector(BaseConnector):
         try:
             ThreatQObject.bulk_upload(self.tq, objects)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_BULK_UPLOAD.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_BULK_UPLOAD.format(error=error_message))
             return action_result
 
         uploaded = [ind for ind in objects if ind.oid]
@@ -1084,10 +1084,10 @@ class ThreatQConnector(BaseConnector):
         try:
             action_result = self.set_data_response(action_result, uploaded)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_message))
 
         return action_result
 
@@ -1111,8 +1111,8 @@ class ThreatQConnector(BaseConnector):
             start_time = parse_date(container_info['start_time'])
             start_time = datetime.strftime(start_time, '%Y-%m-%d %H:%M:%S')
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print("Error occurred while parsing start time. {}".format(msg))
             start_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
@@ -1130,10 +1130,10 @@ class ThreatQConnector(BaseConnector):
         try:
             to_handle = self.get_input_objects(values, obj_data.get('collection'))
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_OBJECT_LIST.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_OBJECT_LIST.format(error=error_message))
             return action_result
 
         self.save_progress("Creating [{}] objects in ThreatQ".format(len(to_handle)))
@@ -1166,8 +1166,8 @@ class ThreatQConnector(BaseConnector):
             try:
                 ThreatQObject.bulk_upload(self.tq, objs)
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
-                msg = '{} -- {}'.format(THREATQ_ERROR_BULK_UPLOAD.format(error=error_msg), traceback.format_exc())
+                error_message = self._get_error_message_from_exception(e)
+                msg = '{} -- {}'.format(THREATQ_ERROR_BULK_UPLOAD.format(error=error_message), traceback.format_exc())
                 self.debug_print(msg)
                 continue
 
@@ -1188,10 +1188,10 @@ class ThreatQConnector(BaseConnector):
         try:
             action_result = self.set_data_response(action_result, uploaded)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_message))
 
         return action_result
 
@@ -1261,8 +1261,8 @@ class ThreatQConnector(BaseConnector):
             start_time = parse_date(container_info['start_time'])
             start_time = datetime.strftime(start_time, '%Y-%m-%d %H:%M:%S')
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print("Error occurred while parsing start time. {}".format(msg))
             start_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
@@ -1290,10 +1290,10 @@ class ThreatQConnector(BaseConnector):
         try:
             to_handle = self.get_input_objects(values, obj_data.get('collection'))
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_OBJECT_LIST.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_OBJECT_LIST.format(error=error_message))
             return action_result
 
         self.save_progress("Adding {} to [{}] objects in ThreatQ".format(context_type, len(to_handle)))
@@ -1332,8 +1332,8 @@ class ThreatQConnector(BaseConnector):
             try:
                 ThreatQObject.bulk_upload(self.tq, objs)
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
-                msg = '{} -- {}'.format(THREATQ_ERROR_BULK_UPLOAD.format(error=error_msg), traceback.format_exc())
+                error_message = self._get_error_message_from_exception(e)
+                msg = '{} -- {}'.format(THREATQ_ERROR_BULK_UPLOAD.format(error=error_message), traceback.format_exc())
                 self.debug_print(msg)
                 continue
 
@@ -1354,10 +1354,10 @@ class ThreatQConnector(BaseConnector):
         try:
             action_result = self.set_data_response(action_result, uploaded)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_message))
 
         return action_result
 
@@ -1390,10 +1390,10 @@ class ThreatQConnector(BaseConnector):
         try:
             items = self.get_value_list(values)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_OBJECT_LIST.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_OBJECT_LIST.format(error=error_message))
             return action_result
 
         results = []
@@ -1411,10 +1411,10 @@ class ThreatQConnector(BaseConnector):
             try:
                 result = self.query_object_details(base_obj, item, exact=True, relationships=False)
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
-                msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+                error_message = self._get_error_message_from_exception(e)
+                msg = '{} -- {}'.format(error_message, traceback.format_exc())
                 self.debug_print(msg)
-                action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_QUERY_OBJECT_DETAILS.format(error=error_msg))
+                action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_QUERY_OBJECT_DETAILS.format(error=error_message))
                 results.append(action_result)
                 continue
 
@@ -1429,10 +1429,10 @@ class ThreatQConnector(BaseConnector):
                 related_res = self.tq.get(
                     '/api/{}/{}/{}'.format(base_obj, result[0].oid, related_obj), withp="attributes").get('data', [])
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
-                msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+                error_message = self._get_error_message_from_exception(e)
+                msg = '{} -- {}'.format(error_message, traceback.format_exc())
                 self.debug_print(msg)
-                action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_GET_RELATED_OBJECTS.format(error=error_msg))
+                action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_GET_RELATED_OBJECTS.format(error=error_message))
                 results.append(action_result)
                 continue
 
@@ -1455,10 +1455,10 @@ class ThreatQConnector(BaseConnector):
             try:
                 action_result = self.set_data_response(action_result, related_objects)
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
-                msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+                error_message = self._get_error_message_from_exception(e)
+                msg = '{} -- {}'.format(error_message, traceback.format_exc())
                 self.debug_print(msg)
-                action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_msg))
+                action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_message))
 
             # Add results
             results.append(action_result)
@@ -1507,10 +1507,10 @@ class ThreatQConnector(BaseConnector):
         try:
             sig.upload()
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, "{}. {}".format(THREATQ_ERROR_UPLOAD_SIGNATURE, error_msg))
+            action_result.set_status(phantom.APP_ERROR, "{}. {}".format(THREATQ_ERROR_UPLOAD_SIGNATURE, error_message))
             return action_result
 
         if not sig.oid:
@@ -1554,10 +1554,10 @@ class ThreatQConnector(BaseConnector):
         try:
             found, unknown = Utils.parse_agnostic_input(values)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_INDICATOR_LIST.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_PARSE_INDICATOR_LIST.format(error=error_message))
             return action_result
 
         self.save_progress("Parsed [{}] indicators; Unable to parse [{}] strings".format(len(found), len(unknown)))
@@ -1576,10 +1576,10 @@ class ThreatQConnector(BaseConnector):
         try:
             ThreatQObject.bulk_upload(self.tq, indicators)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_BULK_UPLOAD.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_BULK_UPLOAD.format(error=error_message))
             return action_result
 
         uploaded = [ind for ind in indicators if ind.oid]
@@ -1594,9 +1594,9 @@ class ThreatQConnector(BaseConnector):
             try:
                 self.tq.put(i._get_api_endpoint(), data=payload)
             except Exception as e:
-                error_msg = self._get_error_message_from_exception(e)
+                error_message = self._get_error_message_from_exception(e)
                 msg = '{}. {} -- {}'.format(
-                    THREATQ_ERROR_SET_INDICATOR_STATUS.format(i), error_msg, traceback.format_exc())
+                    THREATQ_ERROR_SET_INDICATOR_STATUS.format(i), error_message, traceback.format_exc())
                 self.debug_print(msg)
                 failed_count += 1
 
@@ -1620,10 +1620,10 @@ class ThreatQConnector(BaseConnector):
         try:
             action_result = self.set_data_response(action_result, uploaded)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
-            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_msg))
+            action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_SET_DATA_RESPONSE.format(error=error_message))
 
         return action_result
 
@@ -1759,11 +1759,11 @@ class ThreatQConnector(BaseConnector):
             # Re-authenticate with ThreatQ
             self.tq = Threatq(tq_host, auth_data, verify=(not trust_ssl))
         except Exception as e:
-            error_msg = unquote_plus(self._get_error_message_from_exception(e))
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = unquote_plus(self._get_error_message_from_exception(e))
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
             action_result = self.add_action_result(ActionResult(dict(params)))
-            return action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_CONNECTIVITY_TEST.format(error=error_msg))
+            return action_result.set_status(phantom.APP_ERROR, THREATQ_ERROR_CONNECTIVITY_TEST.format(error=error_message))
 
         # Get the action
         action = self.action_map.get(action_id)
@@ -1775,12 +1775,12 @@ class ThreatQConnector(BaseConnector):
             # Dispatch the action
             action_results = action(params)
         except Exception as e:
-            error_msg = self._get_error_message_from_exception(e)
-            msg = '{} -- {}'.format(error_msg, traceback.format_exc())
+            error_message = self._get_error_message_from_exception(e)
+            msg = '{} -- {}'.format(error_message, traceback.format_exc())
             self.debug_print(msg)
 
             action_results = ActionResult(dict(params))
-            action_results.set_status(phantom.APP_ERROR, error_msg)
+            action_results.set_status(phantom.APP_ERROR, error_message)
 
         if not isinstance(action_results, list):
             action_results = [action_results]
