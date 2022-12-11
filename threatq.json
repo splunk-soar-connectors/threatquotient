@@ -1,7 +1,7 @@
 {
     "appid": "76740c11-1738-4220-afd3-bca9fc25d41f",
     "name": "ThreatQ",
-    "description": "Integrates a variety of ThreatQ services into Splunk SOAR.",
+    "description": "Integrates a variety of ThreatQ services into Splunk SOAR",
     "publisher": "ThreatQuotient",
     "contributors": [
         {
@@ -23,7 +23,7 @@
     "product_vendor": "ThreatQuotient",
     "product_name": "ThreatQ",
     "product_version_regex": "4.*",
-    "min_phantom_version": "5.3.",
+    "min_phantom_version": "5.3.0",
     "logo": "logo_threatq.svg",
     "logo_dark": "logo_threatq_dark.svg",
     "python_version": "3",
