@@ -25,8 +25,8 @@
 
 
 THREATQ_NO_DATA = "ThreatQ found no results"
-THREATQ_SUCC_CONNECTIVITY_TEST = "Successfully connected to ThreatQ"
-THREATQ_SUCC_UPLOAD_TASK = "Successfully uploaded task to ThreatQ"
+THREATQ_SUCCESS_CONNECTIVITY_TEST = "Successfully connected to ThreatQ"
+THREATQ_SUCCESS_UPLOAD_TASK = "Successfully uploaded task to ThreatQ"
 
 THREATQ_TASK_STATUS_MAP = {
     'To Do': 1,
@@ -44,7 +44,7 @@ THREATQ_INVESTIGATION_VISIBILITY_MAP = {
 }
 
 # Constants relating to 'get_error_message_from_exception'
-ERROR_MSG_UNAVAILABLE = "Error message unavailable. Please check the asset configuration and|or action parameters."
+ERROR_MESSAGE_UNAVAILABLE = "Error message unavailable. Please check the asset configuration and|or action parameters."
 
 # Constants relating to error messages
 THREATQ_ERROR_CONNECTIVITY_TEST = "Failed to connect to ThreatQ. {error}"
