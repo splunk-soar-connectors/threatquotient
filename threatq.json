@@ -12,18 +12,21 @@
         },
         {
             "name": "Robert Asztalos"
+        },
+        {
+            "name": "Crinela Suciu"
         }
     ],
     "package_name": "threatq",
     "type": "information",
-    "license": "Copyright (c) 2016-2022 ThreatQuotient, Inc.",
+    "license": "Copyright (c) 2016-2024 ThreatQuotient, Inc.",
     "main_module": "threatq_connector.py",
-    "app_version": "2.3.2",
+    "app_version": "2.4.0",
     "utctime_updated": "2022-12-11T22:11:10.000000Z",
     "product_vendor": "ThreatQuotient",
     "product_name": "ThreatQ",
     "product_version_regex": "4.*",
-    "min_phantom_version": "5.3.0",
+    "min_phantom_version": "6.1.1",
     "logo": "logo_threatq.svg",
     "logo_dark": "logo_threatq_dark.svg",
     "python_version": "3",
@@ -1969,35 +1972,9 @@
         }
     ],
     "pip_dependencies": {
-        "wheel": [
-            {
-                "module": "certifi",
-                "input_file": "wheels/shared/certifi-2021.10.8-py2.py3-none-any.whl"
-            },
-            {
-                "module": "chardet",
-                "input_file": "wheels/shared/chardet-3.0.4-py2.py3-none-any.whl"
-            },
-            {
-                "module": "idna",
-                "input_file": "wheels/shared/idna-2.10-py2.py3-none-any.whl"
-            },
-            {
-                "module": "python_dateutil",
-                "input_file": "wheels/shared/python_dateutil-2.8.1-py2.py3-none-any.whl"
-            },
-            {
-                "module": "requests",
-                "input_file": "wheels/shared/requests-2.25.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "six",
-                "input_file": "wheels/shared/six-1.15.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "urllib3",
-                "input_file": "wheels/shared/urllib3-1.26.8-py2.py3-none-any.whl"
-            }
-        ]
+        "wheel": []
+    },
+    "pip39_dependencies": {
+        "wheel": []
     }
 }

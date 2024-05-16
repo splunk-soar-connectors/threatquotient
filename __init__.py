@@ -2,7 +2,7 @@
 # File: __init__.py
 #
 # ThreatQuotient Proprietary and Confidential
-# Copyright (c) 2016-2022 ThreatQuotient, Inc.
+# Copyright (c) 2016-2024 ThreatQuotient, Inc.
 #
 # NOTICE: All information contained herein, is, and remains the property of ThreatQuotient, Inc.
 # The intellectual and technical concepts contained herein are proprietary to ThreatQuotient, Inc.

@@ -1,7 +1,7 @@
 [comment]: # " File: README.md"
 [comment]: # ""
 [comment]: # "    ThreatQuotient Proprietary and Confidential"
-[comment]: # "    Copyright (c) 2016-2022 ThreatQuotient, Inc."
+[comment]: # "    Copyright (c) 2016-2024 ThreatQuotient, Inc."
 [comment]: # ""
 [comment]: # "    NOTICE: All information contained herein, is, and remains the property of ThreatQuotient, Inc."
 [comment]: # "    The intellectual and technical concepts contained herein are proprietary to ThreatQuotient, Inc."
@@ -231,21 +231,40 @@ You can pass a list of indicators to action in few different ways. Each being pa
 differently, but with similar outcomes
 
 -   If only values are specified, the integration will attempt to “detect” the indicator types and
-    upload the known values (i.e. `      1.1.1.1, badurl.com     ` )
--   You can specify indicator types by separating the type and value by a `      :     ` or
+    upload the known values (i.e. `      1.1.1.1, badurl.com     ` ) The following indicator types are supported by this method:
+  - MD5
+  - SHA-1
+  - SHA-256
+  - SHA-384
+  - SHA-512
+  - CIDR Block
+  - URL
+  - FQDN
+  - Email Address
+  - IP Address
+  - CVE
+  - Filename
+  - File Path
+-   You can specify indicators on multiple lines by separating the type and value by a `      :     ` or
     `      =     ` character (i.e. `      IP Address: 1.1.1.1, FQDN: badurl.com     ` )
--   You can even pass the function a list of dictionaries, specifying the indicator type and value,
-    like so:
+    Note: The entries are not case sensitive. You must use the same string type and spacing used by ThreatQ. 
+    Example: ThreatQ uses the following spacing IP Address, so using IPAddress in your entry will not work
+-   You can even pass the function a list of dictionaries. Each entry requires the following:
+  - type
+  - value
+  - one of the following: object_name, object_type, object_code, collection, api_name
 
 ``` json
 [
     {
         "type": "IP Address",
-        "value": "1.1.1.1"
+        "value": "1.1.1.1",
+        "object_type": "indicators"
     },
     {
         "type": "FQDN",
-        "value": "badurl.com"
+        "value": "badurl.com",
+        "object_type": "indicators"
     }
 ]
 ```
