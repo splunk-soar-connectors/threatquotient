@@ -95,7 +95,7 @@ class Utils(object):
                 parser = IndicatorParser(i)
                 matches = parser.match_all()
                 if not matches:
-                    unknown.append(raw)
+                    unknown.append(i)
 
                 for match in matches:
                     data = copy(Utils.object_data)
@@ -106,11 +106,12 @@ class Utils(object):
 
             # If no indicator matches, try to match the name/value pair
             # The name value pair could be an indicator or another object type
-            for index in range(len(unknown)):
-                pair_data = Utils.parse_name_value_pair(unknown[index])
+            unknown_copy = unknown.copy()
+            for ioc in unknown_copy:
+                pair_data = Utils.parse_name_value_pair(ioc)
                 if pair_data and pair_data['api_name'] and (pair_data['value'] or pair_data['title']):
                     output.append(pair_data)
-                    del unknown[index]
+                    unknown.remove(ioc)
 
         else:
             for i in items:
