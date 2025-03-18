@@ -1,8 +1,7 @@
-
 # File: threatq_consts.py
 #
 # ThreatQuotient Proprietary and Confidential
-# Copyright (c) 2016-2024 ThreatQuotient, Inc.
+# Copyright (c) 2016-2025 ThreatQuotient, Inc.
 #
 # NOTICE: All information contained herein, is, and remains the property of ThreatQuotient, Inc.
 # The intellectual and technical concepts contained herein are proprietary to ThreatQuotient, Inc.
@@ -28,20 +27,9 @@ THREATQ_NO_DATA = "ThreatQ found no results"
 THREATQ_SUCCESS_CONNECTIVITY_TEST = "Successfully connected to ThreatQ"
 THREATQ_SUCCESS_UPLOAD_TASK = "Successfully uploaded task to ThreatQ"
 
-THREATQ_TASK_STATUS_MAP = {
-    'To Do': 1,
-    'In Progress': 2,
-    'Review': 3,
-    'Done': 4
-}
-THREATQ_INVESTIGATION_PRIORITY_MAP = {
-    'Normal': 1,
-    'Escalated': 2
-}
-THREATQ_INVESTIGATION_VISIBILITY_MAP = {
-    'Private': 0,
-    'Shared': 1
-}
+THREATQ_TASK_STATUS_MAP = {"To Do": 1, "In Progress": 2, "Review": 3, "Done": 4}
+THREATQ_INVESTIGATION_PRIORITY_MAP = {"Normal": 1, "Escalated": 2}
+THREATQ_INVESTIGATION_VISIBILITY_MAP = {"Private": 0, "Shared": 1}
 
 # Constants relating to 'get_error_message_from_exception'
 ERROR_MESSAGE_UNAVAILABLE = "Error message unavailable. Please check the asset configuration and|or action parameters."
@@ -58,27 +46,24 @@ THREATQ_ERROR_BULK_UPLOAD = "Error occurred while uploading a list of ThreatObje
 THREATQ_ERROR_GET_USERS = "Error occurred while getting users. {error}"
 THREATQ_ERROR_UPLOAD_TASK = "Failed to upload task to ThreatQ"
 THREATQ_ERROR_RELATE_INDICATOR_TO_TASK = "Error occurred while relating indicator {} to the task"
-THREATQ_ERROR_RELATE_INDICATORS_TO_TASK = "Error occurred while relating indicators to the task. "\
-                                        "No indicator was successfully linked with the task."
+THREATQ_ERROR_RELATE_INDICATORS_TO_TASK = (
+    "Error occurred while relating indicators to the task. No indicator was successfully linked with the task."
+)
 THREATQ_ERROR_RELATE_CONTAINER_EVENT_TO_TASK = "Error occurred while relating container event to the task. {error}"
 THREATQ_ERROR_UPLOAD_EVENT = "Failed to upload event to ThreatQ"
 THREATQ_ERROR_UPLOAD_SIGNATURE = "Failed uploading signature to ThreatQ"
 THREATQ_ERROR_CREATE_INVESTIGATION = "Failed to create investigation"
 THREATQ_ERROR_RELATE_INDICATOR_TO_INVESTIGATION = "Error occurred while linking the indicator {} to the investigation"
 THREATQ_ERROR_RELATE_INDICATORS_TO_INVESTIGATION = (
-    "Error occurred while linking indicators as nodes to the investigation. "
-    "No indicator was successfully linked with the investigation."
+    "Error occurred while linking indicators as nodes to the investigation. No indicator was successfully linked with the investigation."
 )
-THREATQ_ERROR_RELATE_CONTAINER_EVENT_TO_INVESTIGATION = (
-    "Error occurred while adding container event to investigation. {error}")
+THREATQ_ERROR_RELATE_CONTAINER_EVENT_TO_INVESTIGATION = "Error occurred while adding container event to investigation. {error}"
 THREATQ_ERROR_FIND_EVENT = "Error occurred while finding event. {error}"
 THREATQ_ERROR_UPLOAD_SPEARPHISH = "Error occurred while uploading spearphish event to ThreatQ. {error}"
-THREATQ_ERROR_RELATE_CONTAINER_EVENT_TO_SPEARPHISH = (
-    "Error occurred while relating container event to the spearphish event. {error}")
+THREATQ_ERROR_RELATE_CONTAINER_EVENT_TO_SPEARPHISH = "Error occurred while relating container event to the spearphish event. {error}"
 THREATQ_ERROR_FIND_FILE = "Error occurred while searching for the file. {error}"
 THREATQ_ERROR_UPLOAD_FILE = "Error occurred while uploading file to ThreatQ. {error}"
 THREATQ_ERROR_PARSE_FILE = "Error occurred while parsing file for indicators. {error}"
 THREATQ_ERROR_RELATE_CONTAINER_EVENT_TO_FILE = "Error occurred while relating container event to the file. {error}"
 THREATQ_ERROR_SET_INDICATOR_STATUS = "Error occurred while setting the status of indicator {}"
-THREATQ_ERROR_SET_INDICATORS_STATUS = "Error occurred while setting the status of indicators. "\
-                                    "No indicator's status was successfully updated."
+THREATQ_ERROR_SET_INDICATORS_STATUS = "Error occurred while setting the status of indicators. No indicator's status was successfully updated."
