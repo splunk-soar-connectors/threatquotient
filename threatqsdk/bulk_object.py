@@ -2,7 +2,7 @@
 # File: bulk_object.py
 #
 # ThreatQuotient Proprietary and Confidential
-# Copyright (c) 2016-2021 ThreatQuotient, Inc. All rights reserved.
+# Copyright (c) 2016-2025 ThreatQuotient, Inc. All rights reserved.
 #
 # NOTICE: All information contained herein, is, and remains the property of ThreatQuotient, Inc.
 # The intellectual and technical concepts contained herein are proprietary to ThreatQuotient, Inc.
@@ -22,31 +22,38 @@ from time import sleep
 
 from six import string_types
 
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-VERSION = '1.1.1'
+VERSION = "1.1.1"
 
-tlp_map = {
-    'red': 1,
-    'amber': 2,
-    'green': 3,
-    'white': 4
-}
+tlp_map = {"red": 1, "amber": 2, "green": 3, "white": 4}
 
 
-class ThreatQObject(object):
+class ThreatQObject:
     """
     Object to encapsulate all object types in ThreatQ
     """
 
     # Not including Files/Attachments because we can't bulk upload
     object_list = [
-        'indicators', 'adversaries', 'events', 'malware',
-        'campaign', 'course_of_action', 'exploit_target',
-        'identities', 'attack_pattern', 'exploit_target',
-        'instrusion_set', 'report', 'ttp', 'vulnerability',
-        'tool', 'stix_pattern'
+        "indicators",
+        "adversaries",
+        "events",
+        "malware",
+        "campaign",
+        "course_of_action",
+        "exploit_target",
+        "identities",
+        "attack_pattern",
+        "exploit_target",
+        "instrusion_set",
+        "report",
+        "ttp",
+        "vulnerability",
+        "tool",
+        "stix_pattern",
     ]
 
     def __init__(self, tq, api_name):
@@ -55,10 +62,10 @@ class ThreatQObject(object):
 
         # Object metadata
         self.oid = None
-        self.value = ''
-        self.name = ''
-        self.title = ''
-        self.description = ''
+        self.value = ""
+        self.name = ""
+        self.title = ""
+        self.description = ""
         self.attributes = []
         self.published_at = None
         self.happened_at = None
@@ -80,7 +87,7 @@ class ThreatQObject(object):
         return self.api_name
 
     def _get_api_endpoint(self):
-        return '/api/' + self.api_name + '/' + str(self.oid)
+        return "/api/" + self.api_name + "/" + str(self.oid)
 
     def _id(self):
         """
@@ -103,9 +110,9 @@ class ThreatQObject(object):
         """
 
         # Fix any user errors ;)
-        if self.api_name == 'adversaries':
+        if self.api_name == "adversaries":
             self.name = value
-        elif self.api_name == 'events':
+        elif self.api_name == "events":
             self.title = value
         else:
             self.value = value
@@ -157,7 +164,7 @@ class ThreatQObject(object):
         """
 
         if len(args) == 1 and isinstance(args[0], string_types):
-            self._add_source_quick(args[0], tlp_id=kwargs.get('tlp_id'), tlp=kwargs.get('tlp'))
+            self._add_source_quick(args[0], tlp_id=kwargs.get("tlp_id"), tlp=kwargs.get("tlp"))
         elif len(args) == 1 and isinstance(args[0], ThreatQSource):
             self._add_source_object(args[0])
         elif len(args) == 1 and isinstance(args[0], list):
@@ -236,38 +243,38 @@ class ThreatQObject(object):
         """
 
         # Load basic data
-        self.api_name = api_response.get('api_name', self.api_name)
-        self.oid = api_response.get('id')
-        self.set_value(api_response.get('value', self.value))
-        self.name = api_response.get('name', self.name)
-        self.title = api_response.get('title', self.title)
-        self.description = api_response.get('description', '')
-        self.happened_at = api_response.get('happened_at')
-        self.type_id = api_response.get('type_id')
-        if 'type' in api_response:
-            if isinstance(api_response['type'], dict):
-                self.type = api_response.get('type', {}).get('name')
-            elif isinstance(api_response['type'], string_types):
-                self.type = api_response['type']
-            elif isinstance(api_response['type'], int):
-                self.type_id = api_response['type']
-        self.status_id = api_response.get('status_id')
-        if 'status' in api_response:
-            if isinstance(api_response['status'], dict):
-                self.status = api_response.get('status', {}).get('name')
-            elif isinstance(api_response['status'], string_types):
-                self.status = api_response['status']
-            elif isinstance(api_response['status'], int):
-                self.status_id = api_response['status']
+        self.api_name = api_response.get("api_name", self.api_name)
+        self.oid = api_response.get("id")
+        self.set_value(api_response.get("value", self.value))
+        self.name = api_response.get("name", self.name)
+        self.title = api_response.get("title", self.title)
+        self.description = api_response.get("description", "")
+        self.happened_at = api_response.get("happened_at")
+        self.type_id = api_response.get("type_id")
+        if "type" in api_response:
+            if isinstance(api_response["type"], dict):
+                self.type = api_response.get("type", {}).get("name")
+            elif isinstance(api_response["type"], string_types):
+                self.type = api_response["type"]
+            elif isinstance(api_response["type"], int):
+                self.type_id = api_response["type"]
+        self.status_id = api_response.get("status_id")
+        if "status" in api_response:
+            if isinstance(api_response["status"], dict):
+                self.status = api_response.get("status", {}).get("name")
+            elif isinstance(api_response["status"], string_types):
+                self.status = api_response["status"]
+            elif isinstance(api_response["status"], int):
+                self.status_id = api_response["status"]
 
         # Load score
         if self.api_name == "indicators" and "score" in api_response:
-            if isinstance(api_response['score'], dict):
-                self.score = api_response['score'].get('manual_score')
+            if isinstance(api_response["score"], dict):
+                self.score = api_response["score"].get("manual_score")
                 if self.score is None:
-                    self.score = api_response['score'].get('generated_score')
+                    self.score = api_response["score"].get("generated_score")
             else:
-                self.score = api_response['score']
+                self.score = api_response["score"]
 
             self.score = math.floor(float(self.score))
 
@@ -285,24 +292,24 @@ class ThreatQObject(object):
                     self.relationships[item].append(obj)
 
         # Load tags
-        if api_response.get('tags'):
-            self.add_tags(api_response.get('tags', []) or [])
+        if api_response.get("tags"):
+            self.add_tags(api_response.get("tags", []) or [])
 
         # Load soures
-        for item in api_response.get('sources', []) or []:
-            self.add_source(item['name'], tlp_id=item.get('tlp_id'), tlp=item.get('tlp'))
+        for item in api_response.get("sources", []) or []:
+            self.add_source(item["name"], tlp_id=item.get("tlp_id"), tlp=item.get("tlp"))
         for item in sources or []:
             if isinstance(item, dict):
-                self.add_source(item['name'], tlp_id=item.get('tlp_id'), tlp=item.get('tlp'))
+                self.add_source(item["name"], tlp_id=item.get("tlp_id"), tlp=item.get("tlp"))
             else:
                 self.add_source(item)
 
         # Load attributes
-        for item in api_response.get('attributes', []) or []:
-            if not item['name'] or not item['value']:  # You wouldn't think this would get hit, but it can
+        for item in api_response.get("attributes", []) or []:
+            if not item["name"] or not item["value"]:  # You wouldn't think this would get hit, but it can
                 continue
 
-            attr_src = item.get('sources', [])
+            attr_src = item.get("sources", [])
 
             # Append custom attribute sources
             if attr_sources:
@@ -310,12 +317,12 @@ class ThreatQObject(object):
                     if isinstance(item, dict):
                         attr_src.append(src)
                     else:
-                        attr_src.append({'name': src})
+                        attr_src.append({"name": src})
 
-            self.add_attribute(item['name'], item['value'], sources=attr_sources, tlp=item.get('tlp'))
+            self.add_attribute(item["name"], item["value"], sources=attr_sources, tlp=item.get("tlp"))
 
         # Load comments
-        self.comments = api_response.get('comments', []) or []
+        self.comments = api_response.get("comments", []) or []
 
         return self
 
@@ -338,26 +345,26 @@ class ThreatQObject(object):
         while i < len(data):
             delay = randint(1, 3)
             if show_debug:
-                logger.debug('Bulk uploading [{}] entries {} - {}'.format(objects[0].api_name, i, i + batch))
+                logger.debug(f"Bulk uploading [{objects[0].api_name}] entries {i} - {i + batch}")
 
             try:
                 # Upload the objects
-                res = tq.post('/api/{}/consume'.format(objects[0].api_name), data=data[i:i + batch])
-                res = [] if not res else res.get('data', [])
+                res = tq.post(f"/api/{objects[0].api_name}/consume", data=data[i : i + batch])
+                res = [] if not res else res.get("data", [])
                 output.extend(res)
 
                 # Load in the ID from the upload
                 for item in res:
                     for obj in objects:
                         if (
-                            obj.name and obj.name == item.get('name')
-                            or obj.value and obj.value == item.get('value') # noqa
-                            or obj.title and obj.title == item.get('title') # noqa
+                            (obj.name and obj.name == item.get("name"))
+                            or (obj.value and obj.value == item.get("value"))
+                            or (obj.title and obj.title == item.get("title"))
                         ):
-                            obj._set_id(item.get('id'))
+                            obj._set_id(item.get("id"))
                             break
             except Exception:
-                logger.error('Failed to upload entries {} - {}. Continuing...'.format(i, i + batch))
+                logger.error(f"Failed to upload entries {i} - {i + batch}. Continuing...")
 
             sleep(delay)
             i += batch
@@ -372,66 +379,64 @@ class ThreatQObject(object):
         output = {}
 
         if not self.value and not self.name and not self.title:
-            raise ValueError('Threat Object has no value or name!')
+            raise ValueError("Threat Object has no value or name!")
 
         # The default fields
         if not for_api:
-            output['api_name'] = self.api_name
+            output["api_name"] = self.api_name
         if self.value:
-            output['value'] = self.value
+            output["value"] = self.value
         if self.name:
-            output['name'] = self.name
+            output["name"] = self.name
         if self.title:
-            output['title'] = self.title
-        if self.description and 'description' not in ignore:
+            output["title"] = self.title
+        if self.description and "description" not in ignore:
             # Need this case because of the techdebt in the API
-            if self.api_name == 'adversaries':
-                output['description'] = [{'value': self.description[:65500]}]
+            if self.api_name == "adversaries":
+                output["description"] = [{"value": self.description[:65500]}]
             else:
-                output['description'] = self.description[:65500]  # Max MariaDB TEXT length
+                output["description"] = self.description[:65500]  # Max MariaDB TEXT length
 
-        if self.oid and 'id' not in ignore:
-            output['id'] = self.oid
-        if self.comments and 'comments' not in ignore:
-            output['comments'] = self.comments
-        if self.attributes and 'attributes' not in ignore:
+        if self.oid and "id" not in ignore:
+            output["id"] = self.oid
+        if self.comments and "comments" not in ignore:
+            output["comments"] = self.comments
+        if self.attributes and "attributes" not in ignore:
             self.attributes = ThreatQAttribute.merge_attributes(self.attributes)
-            output['attributes'] = [
-                attr.to_dict() for attr in self.attributes if attr and isinstance(attr, ThreatQAttribute)]
-        if self.tlp and self.tlp in tlp_map and 'tlp' not in ignore:
-            output['tlp_id'] = tlp_map.get(self.tlp)
-        if self.status and 'status' not in ignore:
-            output['status'] = {'name': self.status}
-        if self.status_id and 'status' not in ignore and 'status_id' not in ignore:
-            output['status_id'] = self.status_id
-        if self.type and 'type' not in ignore:
-            output['type'] = {'name': self.type}
-        if self.type_id and 'type' not in ignore and 'type_id' not in ignore:
-            output['type_id'] = self.type_id
-        if self.sources and 'sources' not in ignore:
+            output["attributes"] = [attr.to_dict() for attr in self.attributes if attr and isinstance(attr, ThreatQAttribute)]
+        if self.tlp and self.tlp in tlp_map and "tlp" not in ignore:
+            output["tlp_id"] = tlp_map.get(self.tlp)
+        if self.status and "status" not in ignore:
+            output["status"] = {"name": self.status}
+        if self.status_id and "status" not in ignore and "status_id" not in ignore:
+            output["status_id"] = self.status_id
+        if self.type and "type" not in ignore:
+            output["type"] = {"name": self.type}
+        if self.type_id and "type" not in ignore and "type_id" not in ignore:
+            output["type_id"] = self.type_id
+        if self.sources and "sources" not in ignore:
             self.sources = ThreatQSource.merge_sources(self.sources)  # Merge the sources by hierarchy
-            output['sources'] = [
-                src.to_dict() for src in self.sources if src and isinstance(src, ThreatQSource)]
-        if self.happened_at and 'happened_at' not in ignore:
-            output['happened_at'] = self.happened_at
-        if self.api_name == "indicators" and self.score is not None and 'score' not in ignore and not for_api:
-            output['score'] = self.score
+            output["sources"] = [src.to_dict() for src in self.sources if src and isinstance(src, ThreatQSource)]
+        if self.happened_at and "happened_at" not in ignore:
+            output["happened_at"] = self.happened_at
+        if self.api_name == "indicators" and self.score is not None and "score" not in ignore and not for_api:
+            output["score"] = self.score
         if self.tags:
-            output['tags'] = self.tags
+            output["tags"] = self.tags
 
         # Add relationships
-        if 'relationships' not in ignore:
+        if "relationships" not in ignore:
             for k, v in self.relationships.items():
                 output[k] = []
                 for item in v:
                     # Only add if an ID is available
-                    if isinstance(item, dict) and 'id' in item:
-                        output[k].append({'id': item['id']})
+                    if isinstance(item, dict) and "id" in item:
+                        output[k].append({"id": item["id"]})
                     elif isinstance(item, ThreatQObject) and item.oid:
-                        output[k].append({'id': item.oid} if for_api else item._to_dict())
+                        output[k].append({"id": item.oid} if for_api else item._to_dict())
 
-        if self.published_at and 'published_at' not in ignore:
-            output['published_at'] = self.published_at
+        if self.published_at and "published_at" not in ignore:
+            output["published_at"] = self.published_at
 
         return output
 
@@ -441,9 +446,9 @@ class ThreatQObject(object):
         """
 
         if not value:
-            raise Exception('Cannot add a comment to a Threat Object without a value!')
+            raise Exception("Cannot add a comment to a Threat Object without a value!")
 
-        self.comments.append({'value': value})
+        self.comments.append({"value": value})
 
     def get_comments(self):
         """
@@ -451,11 +456,11 @@ class ThreatQObject(object):
         """
 
         if not self.oid:
-            raise Exception('Cannot get comments for a Threat Object without an ID!')
+            raise Exception("Cannot get comments for a Threat Object without an ID!")
 
-        p = {'with': 'sources'}
-        res = self.tq.get(self._get_api_endpoint() + '/comments', params=p)
-        self.comments = res.get('data')
+        p = {"with": "sources"}
+        res = self.tq.get(self._get_api_endpoint() + "/comments", params=p)
+        self.comments = res.get("data")
 
         return self.comments
 
@@ -476,7 +481,7 @@ class ThreatQObject(object):
             return
 
         if isinstance(value, bool):
-            value = 'Yes' if value else 'No'
+            value = "Yes" if value else "No"
 
         attr = ThreatQAttribute(key, value, sources=sources, tlp=tlp)
         self._add_attribute_object(attr)
@@ -502,14 +507,14 @@ class ThreatQObject(object):
         """
 
         if not self.oid:
-            raise Exception('Cannot get attributes of a Threat Object without an ID!')
+            raise Exception("Cannot get attributes of a Threat Object without an ID!")
 
-        endpoint = self._get_api_endpoint() + '/attributes'
-        results = self.tq.get(endpoint, withp='attribute')
-        if 'data' not in results:
+        endpoint = self._get_api_endpoint() + "/attributes"
+        results = self.tq.get(endpoint, withp="attribute")
+        if "data" not in results:
             return []
 
-        self.attributes = results['data']
+        self.attributes = results["data"]
         return self.attributes
 
     def _get_api_suffix(self, obj_type):
@@ -521,18 +526,18 @@ class ThreatQObject(object):
         """
 
         if not self.oid:
-            raise Exception('Cannot get related objects of the Threat Object without an ID!')
+            raise Exception("Cannot get related objects of the Threat Object without an ID!")
 
         suffix = self._get_api_suffix(obj_type)
-        if obj_type == self.__class__ and suffix == 'adversaries':
+        if obj_type == self.__class__ and suffix == "adversaries":
             return []
-        endpoint = self._get_api_endpoint() + '/' + suffix
+        endpoint = self._get_api_endpoint() + "/" + suffix
         results = self.tq.get(endpoint)
-        if 'data' not in results:
+        if "data" not in results:
             return []
 
         tr = []
-        for obj in results['data']:
+        for obj in results["data"]:
             inst = obj_type(self.tq)
             inst.fill_from_api_response(obj)
             tr.append(inst)
@@ -548,10 +553,10 @@ class ThreatQObject(object):
         """
 
         if not self.oid:
-            raise Exception('Cannot get Threat Object URL without an ID!')
+            raise Exception("Cannot get Threat Object URL without an ID!")
 
-        base = self.tq.threatq_host + '/{}/'.format(self.add_attribute)
-        return base + str(oid) + '/details'
+        base = self.tq.threatq_host + f"/{self.add_attribute}/"
+        return base + str(oid) + "/details"
 
     def upload(self):
         """
@@ -560,28 +565,28 @@ class ThreatQObject(object):
 
         ThreatQObject.bulk_upload(self.tq, [self])
 
-    def find(self, withp=''):
+    def find(self, withp=""):
         """
         Finds an object by its value
         """
 
         params = {}
         if self.oid:
-            params['id'] = self.oid
+            params["id"] = self.oid
         elif self.value:
-            params['value'] = self.value
+            params["value"] = self.value
         elif self.name:
-            params['name'] = self.name
+            params["name"] = self.name
         elif self.title:
-            params['title'] = self.title
-            if ',' in params['title']:
-                params['title'] = params['title'].split(',')[0] + '%'
+            params["title"] = self.title
+            if "," in params["title"]:
+                params["title"] = params["title"].split(",")[0] + "%"
         if withp:
-            params['with'] = withp
+            params["with"] = withp
 
-        res = self.tq.get('/api/{}'.format(self.api_name), params=params)
-        if res and res.get('data') and res['data']:
-            self.fill_from_api_response(res['data'][0])
+        res = self.tq.get(f"/api/{self.api_name}", params=params)
+        if res and res.get("data") and res["data"]:
+            self.fill_from_api_response(res["data"][0])
 
         return self
 
@@ -595,18 +600,18 @@ class ThreatQObject(object):
 
     def upload_tags(self, tags):
         if not self.oid:
-            raise Exception('Cannot add tag to a Threat Object without an ID!')
+            raise Exception("Cannot add tag to a Threat Object without an ID!")
 
         data = []
         if isinstance(tags, list):
             for tag in tags:
                 if isinstance(tag, string_types):
-                    data.append({'name': tag})
-                elif isinstance(tag, dict) and 'name' in tag:
+                    data.append({"name": tag})
+                elif isinstance(tag, dict) and "name" in tag:
                     data.append(tag)
 
         if data:
-            self.tq.post('/api/{}/{}/tags'.format(self.api_name, self.oid), data=data)
+            self.tq.post(f"/api/{self.api_name}/{self.oid}/tags", data=data)
 
     @staticmethod
     def parse_tlp(tlp):
@@ -620,8 +625,7 @@ class ThreatQObject(object):
             return tlp
 
 
-class ThreatQSource(object):
-
+class ThreatQSource:
     def __init__(self, name, tlp=None):
         """
         An encapsulation of a ThreatQ source
@@ -638,14 +642,14 @@ class ThreatQSource(object):
 
         new_sources = []
         if isinstance(sources, string_types):
-            for src in sources.split(','):  # Support comma separated sources
+            for src in sources.split(","):  # Support comma separated sources
                 new_sources.append(ThreatQSource(src))
         elif isinstance(sources, list):
             for src in sources:
                 new_sources.extend(ThreatQSource.make_source_list(src))
-        elif isinstance(sources, dict) and 'name' in sources:
-            tlp = sources.get('tlp', sources.get('tlp_id'))
-            new_sources.append(ThreatQSource(sources['name'], tlp=tlp))
+        elif isinstance(sources, dict) and "name" in sources:
+            tlp = sources.get("tlp", sources.get("tlp_id"))
+            new_sources.append(ThreatQSource(sources["name"], tlp=tlp))
         elif isinstance(sources, ThreatQSource) and sources.name:
             new_sources.append(sources)
 
@@ -660,7 +664,6 @@ class ThreatQSource(object):
 
         new_sources = []
         for i in source_list:
-
             # Find a match
             found = None
             for j in new_sources:
@@ -683,15 +686,14 @@ class ThreatQSource(object):
         return new_sources
 
     def to_dict(self):
-        output = {'name': self.name}
+        output = {"name": self.name}
         if self.tlp:
-            output['tlp_id'] = self.tlp
+            output["tlp_id"] = self.tlp
 
         return output
 
 
-class ThreatQAttribute(object):
-
+class ThreatQAttribute:
     def __init__(self, name, value, sources=None, tlp=None):
         """
         An encapsulation of a ThreatQ attribute
@@ -747,26 +749,26 @@ class ThreatQAttribute(object):
 
         if isinstance(source, ThreatQSource):
             self.sources.append(source)
-        elif isinstance(source, dict) and 'name' in source:
+        elif isinstance(source, dict) and "name" in source:
             if tlp:
-                source['tlp'] = tlp
+                source["tlp"] = tlp
             self.sources.extend(ThreatQSource.make_source_list(source))
         elif isinstance(source, string_types):
-            for i in source.split(','):
+            for i in source.split(","):
                 self.sources.append(ThreatQSource(i, tlp=tlp))
         elif isinstance(source, list):
             for i in source:
                 self.add_source(i, tlp=tlp)
 
     def to_dict(self):
-        output = {'name': self.name, 'value': self.value}
-        if isinstance(output['value'], bool):
-            output['value'] = 'Yes' if output['value'] else 'No'
+        output = {"name": self.name, "value": self.value}
+        if isinstance(output["value"], bool):
+            output["value"] = "Yes" if output["value"] else "No"
 
         if self.sources:
             self.sources = ThreatQSource.merge_sources(self.sources)  # Merge the sources by hierarchy
-            output['sources'] = [src.to_dict() for src in self.sources if src]
+            output["sources"] = [src.to_dict() for src in self.sources if src]
         if self.tlp:
-            output['tlp_id'] = self.tlp
+            output["tlp_id"] = self.tlp
 
         return output

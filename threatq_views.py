@@ -1,8 +1,7 @@
-
 # File: threatq_views.py
 #
 # ThreatQuotient Proprietary and Confidential
-# Copyright (c) 2016-2024 ThreatQuotient, Inc.
+# Copyright (c) 2016-2025 ThreatQuotient, Inc.
 #
 # NOTICE: All information contained herein, is, and remains the property of ThreatQuotient, Inc.
 # The intellectual and technical concepts contained herein are proprietary to ThreatQuotient, Inc.
@@ -45,18 +44,18 @@ def get_ctx_result(provides, result):
     data = result.get_data()
     message = result.get_message()
 
-    ctx_result['param'] = param
-    ctx_result['data'] = []
-    ctx_result['summary'] = {}
-    ctx_result['message'] = message
-    ctx_result['action'] = provides
-    ctx_result['object_types'] = object_types
+    ctx_result["param"] = param
+    ctx_result["data"] = []
+    ctx_result["summary"] = {}
+    ctx_result["message"] = message
+    ctx_result["action"] = provides
+    ctx_result["object_types"] = object_types
 
     if summary:
-        ctx_result['summary'] = summary
+        ctx_result["summary"] = summary
 
     if data:
-        ctx_result['data'] = data
+        ctx_result["data"] = data
 
     return ctx_result
 
@@ -73,10 +72,9 @@ def render_summarize(provides, all_app_runs, context):
     Returns: html page
     """
 
-    context['results'] = results = []
+    context["results"] = results = []
     for summary, action_results in all_app_runs:
         for result in action_results:
-
             ctx_result = get_ctx_result(provides, result)
             if not ctx_result:
                 continue
@@ -98,10 +96,9 @@ def render_uploaded(provides, all_app_runs, context):
     Returns: html page
     """
 
-    context['results'] = results = []
+    context["results"] = results = []
     for summary, action_results in all_app_runs:
         for result in action_results:
-
             ctx_result = get_ctx_result(provides, result)
             if not ctx_result:
                 continue

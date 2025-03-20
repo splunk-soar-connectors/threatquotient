@@ -2,7 +2,7 @@
 # File: file.py
 #
 # ThreatQuotient Proprietary and Confidential
-# Copyright (c) 2016-2021 ThreatQuotient, Inc. All rights reserved.
+# Copyright (c) 2016-2025 ThreatQuotient, Inc. All rights reserved.
 #
 # NOTICE: All information contained herein, is, and remains the property of ThreatQuotient, Inc.
 # The intellectual and technical concepts contained herein are proprietary to ThreatQuotient, Inc.
@@ -24,7 +24,7 @@ from .tqobject import ThreatQuotientObject
 
 
 class File(ThreatQuotientObject):
-    """ Represents an Adversary in the ThreatQ system """
+    """Represents an Adversary in the ThreatQ system"""
 
     def __init__(self, tq):
         self.tq = tq
@@ -39,7 +39,7 @@ class File(ThreatQuotientObject):
 
     @staticmethod
     def _get_base_endpoint_name():
-        return 'attachments'
+        return "attachments"
 
     def _id(self):
         return self.fid
@@ -48,8 +48,8 @@ class File(ThreatQuotientObject):
         self.fid = value
 
     def fill_from_api_response(self, api_response):
-        self.fid = api_response['id']
-        self.name = api_response['name']
+        self.fid = api_response["id"]
+        self.name = api_response["name"]
         self.description = None
 
     def set_content(self, content):
@@ -59,14 +59,14 @@ class File(ThreatQuotientObject):
         raise NotImplementedError("File uploads don't serialize well")
 
     def _file_url(self, fid):
-        """ Get a link to the file suitable for presentation to an
+        """Get a link to the file suitable for presentation to an
         end user
 
         :param fid: File ID
         :type fid: int
         """
-        base = self.tq.threatq_host + '/files/'
-        return base + str(fid) + '/details'
+        base = self.tq.threatq_host + "/files/"
+        return base + str(fid) + "/details"
 
     def find(self, md5=None):
         """
@@ -75,19 +75,19 @@ class File(ThreatQuotientObject):
 
         params = {}
         if md5:
-            params['hash'] = md5
+            params["hash"] = md5
         else:
-            params['name'] = self.name
+            params["name"] = self.name
 
         try:
-            res = self.tq.get('/api/attachments', params=params)
-            if res and res.get('data') and res['data']:
-                self.fill_from_api_response(res['data'][0])
+            res = self.tq.get("/api/attachments", params=params)
+            if res and res.get("data") and res["data"]:
+                self.fill_from_api_response(res["data"][0])
         except Exception:
             pass
 
-    def parse_and_import(self, source, status='Review', parser='Generic Text', normalize=True, delete=False):
-        """ Parse the file and import the indicators using a parser
+    def parse_and_import(self, source, status="Review", parser="Generic Text", normalize=True, delete=False):
+        """Parse the file and import the indicators using a parser
 
         :param str source: Source to use for each Indicator
         :param str status: Indicator status
@@ -105,35 +105,23 @@ class File(ThreatQuotientObject):
             source = source.to_dict()
 
         if not parser_id:
-            raise ValueError('Invalid parser')
+            raise ValueError("Invalid parser")
 
         if not status_id:
-            raise ValueError('{} is not a valid status'.format(status))
+            raise ValueError(f"{status} is not a valid status")
 
-        res = self.tq.post(
-            '/api/imports',
-            data={
-                'attachment_id': self.fid,
-                'normalize': normalize,
-                'content_type_id': parser_id
-            })
+        res = self.tq.post("/api/imports", data={"attachment_id": self.fid, "normalize": normalize, "content_type_id": parser_id})
 
-        r = res.get('data')
-        if not r or 'id' not in r:
+        r = res.get("data")
+        if not r or "id" not in r:
             raise exceptions.UploadFailedError(res)
 
-        iid = r['id']
-        self.tq.put(
-            '/api/imports/%i' % iid,
-            data={
-                'delete_after_import': delete,
-                'import_source': source,
-                'indicator_global_status': status_id
-            })
-        return self.tq.get('/api/imports/%i/commit' % iid)
+        iid = r["id"]
+        self.tq.put("/api/imports/%i" % iid, data={"delete_after_import": delete, "import_source": source, "indicator_global_status": status_id})  # noqa: UP031
+        return self.tq.get("/api/imports/%i/commit" % iid)  # noqa: UP031
 
     def upload(self, sources=None):
-        """ Upload ourself to threatq """
+        """Upload ourself to threatq"""
 
         # Backwards compatible with < v1.4
         if self.path is None:
@@ -148,61 +136,59 @@ class File(ThreatQuotientObject):
         data = {}
         sources = ThreatQSource.make_source_list(sources)
         if sources:
-            data['sources'] = [src.to_dict() for src in sources if src]
+            data["sources"] = [src.to_dict() for src in sources if src]
 
         fname = os.path.basename(self.name)
-        new_filename = "%i-%s" % (
-            random.randint(1, 100000),
-            fname.replace('.', ''))
+        new_filename = "%i-%s" % (random.randint(1, 100000), fname.replace(".", ""))  # noqa: UP031
 
         content = self.content
         if not content:
-            inf = open(self.path, 'rb')
+            inf = open(self.path, "rb")
             content = inf.read()
             inf.close()
 
         res = self.tq.post(
-            '/api/attachments/upload',
+            "/api/attachments/upload",
             data={
-                'resumableIdentifier': new_filename,
-                'resumableRelativePath': fname,
-                'resumableTotalChunks': 1,
-                'resumableFilename': fname,
+                "resumableIdentifier": new_filename,
+                "resumableRelativePath": fname,
+                "resumableTotalChunks": 1,
+                "resumableFilename": fname,
             },
-            files={
-                'file': ('blob', content, 'application/octet-stream')
-            })
+            files={"file": ("blob", content, "application/octet-stream")},
+        )
 
-        data['name'] = fname
+        data["name"] = fname
         if self.title:
-            data['title'] = self.title
-        data['type'] = self.ftype
-        data['malware_locked'] = self.locked
+            data["title"] = self.title
+        data["type"] = self.ftype
+        data["malware_locked"] = self.locked
 
-        res = self.tq.post('/api/attachments', data=data)
+        res = self.tq.post("/api/attachments", data=data)
 
-        r = res.get('data')
-        if not r or 'id' not in r:
+        r = res.get("data")
+        if not r or "id" not in r:
             raise exceptions.UploadFailedError(res)
 
         for t in self.tags:
-            res = self.tq.post('/api/attachments/%i/tags' % r['id'], data={'name': t})
+            res = self.tq.post("/api/attachments/%i/tags" % r["id"], data={"name": t})  # noqa: UP031
 
-        self.fid = r['id']
+        self.fid = r["id"]
         return self
 
     def get_related_indicators(self):
-        """ Get the indicators related to this Adversary
+        """Get the indicators related to this Adversary
 
         .. deprecated:: 1.01
             Use :py:meth:`threatqsdk.tqobject.get_related_objects` instead
         """
         # imported here to prevent circular deps
         from fn_threatq.threatqsdk.indicator import Indicator
+
         return self.get_related_objects(Indicator)
 
     def url(self):
-        """ Get a link to the file suitable for presentation to an
+        """Get a link to the file suitable for presentation to an
         end user
 
         :raises: :py:class:`~threatqsdk.exceptions.NotCreatedError` if

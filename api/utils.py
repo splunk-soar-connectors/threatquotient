@@ -2,7 +2,7 @@
 # File: utils.py
 #
 # ThreatQuotient Proprietary and Confidential
-# Copyright (c) 2016-2021 ThreatQuotient, Inc. All rights reserved.
+# Copyright (c) 2016-2025 ThreatQuotient, Inc. All rights reserved.
 #
 # NOTICE: All information contained herein, is, and remains the property of ThreatQuotient, Inc.
 # The intellectual and technical concepts contained herein are proprietary to ThreatQuotient, Inc.
@@ -25,21 +25,12 @@ from .indicator_parser import IndicatorParser
 from .tq_mappings import object_types, statused_objects, threatq_objects, typed_objects
 
 
-class Utils(object):
+class Utils:
     """
     Utilities class. A bunch of methods to facilitate the connector
     """
 
-    object_data = {
-        'id': None,
-        'api_name': None,
-        'value': None,
-        'type': None,
-        'attributes': [],
-        'tags': [],
-        'status': None,
-        'description': None
-    }
+    object_data = {"id": None, "api_name": None, "value": None, "type": None, "attributes": [], "tags": [], "status": None, "description": None}
 
     @staticmethod
     def parse_agnostic_input(raw, use_indicator_parser=True):
@@ -75,16 +66,16 @@ class Utils(object):
         # If it's an integer, assume it's an ID
         if Utils.is_int(raw):
             data = copy(Utils.object_data)
-            data['id'] = int(raw)
+            data["id"] = int(raw)
             output.append(data)
             return output, unknown
 
         # Handle either comma-separated list or line-separated list
         items = [raw]
-        if '\n' in raw:
-            items = raw.split('\n')
-        elif ',' in raw:
-            items = raw.split(',')
+        if "\n" in raw:
+            items = raw.split("\n")
+        elif "," in raw:
+            items = raw.split(",")
 
         # Remove empty whitelist
         items = [item.strip() for item in items if item]
@@ -99,9 +90,9 @@ class Utils(object):
 
                 for match in matches:
                     data = copy(Utils.object_data)
-                    data['api_name'] = 'indicators'
-                    data['value'] = match['value']
-                    data['type'] = match['type']
+                    data["api_name"] = "indicators"
+                    data["value"] = match["value"]
+                    data["type"] = match["type"]
                     output.append(data)
 
             # If no indicator matches, try to match the name/value pair
@@ -109,7 +100,7 @@ class Utils(object):
             unknown_copy = unknown.copy()
             for ioc in unknown_copy:
                 pair_data = Utils.parse_name_value_pair(ioc)
-                if pair_data and pair_data['api_name'] and (pair_data['value'] or pair_data['title']):
+                if pair_data and pair_data["api_name"] and (pair_data["value"] or pair_data["title"]):
                     output.append(pair_data)
                     unknown.remove(ioc)
 
@@ -117,11 +108,11 @@ class Utils(object):
             for i in items:
                 if Utils.is_int(i):
                     data = copy(Utils.object_data)
-                    data['id'] = int(i)
+                    data["id"] = int(i)
                     output.append(data)
                 else:
                     pair_data = Utils.parse_name_value_pair(i)
-                    if pair_data and pair_data['api_name']:
+                    if pair_data and pair_data["api_name"]:
                         output.append(pair_data)
                     else:
                         unknown.append(raw)
@@ -142,11 +133,11 @@ class Utils(object):
         # We will handle 3 types of delimiters
         delimiter = None
         if line.count("="):
-            delimiter = '='
+            delimiter = "="
         elif line.count(":"):
-            delimiter = ':'
+            delimiter = ":"
         elif line.count("|"):
-            delimiter = '|'
+            delimiter = "|"
 
         # If no delimiter, it's not a N/V pair, so return none
         if not delimiter:
@@ -166,13 +157,13 @@ class Utils(object):
         # Set pair data accordingly if the first part is the type
         # or if the second half is the type
         if part1_type_match:
-            pair_data['api_name'] = 'indicators'
-            pair_data['value'] = part2
-            pair_data['type'] = part1_type_match
+            pair_data["api_name"] = "indicators"
+            pair_data["value"] = part2
+            pair_data["type"] = part1_type_match
         elif part2_type_match:
-            pair_data['api_name'] = 'indicators'
-            pair_data['value'] = part1
-            pair_data['type'] = part2_type_match
+            pair_data["api_name"] = "indicators"
+            pair_data["value"] = part1
+            pair_data["type"] = part2_type_match
         else:
             # Check if either part is an event type
             part1_event_type_match = Utils.match_name_to_event_type(part1)
@@ -181,27 +172,26 @@ class Utils(object):
             # Set pair data accordingly if the first part is the type
             # or if the second half is the object name
             if part1_event_type_match:
-                pair_data['api_name'] = 'events'
-                pair_data['title'] = part2
-                pair_data['type'] = part1_event_type_match
+                pair_data["api_name"] = "events"
+                pair_data["title"] = part2
+                pair_data["type"] = part1_event_type_match
             elif part2_event_type_match:
-                pair_data['api_name'] = 'events'
-                pair_data['title'] = part1
-                pair_data['type'] = part2_event_type_match
+                pair_data["api_name"] = "events"
+                pair_data["title"] = part1
+                pair_data["type"] = part2_event_type_match
             else:
-
                 # Check if either part is an object name. If so, use the other as the value
-                part1_obj_match = Utils.match_name_to_object(part1).get('collection')
-                part2_obj_match = Utils.match_name_to_object(part2).get('collection')
+                part1_obj_match = Utils.match_name_to_object(part1).get("collection")
+                part2_obj_match = Utils.match_name_to_object(part2).get("collection")
 
                 # Set pair data accordingly if the first part is the type
                 # or if the second half is the object name
                 if part1_obj_match:
-                    pair_data['api_name'] = part1_obj_match
-                    pair_data['value'] = part2
+                    pair_data["api_name"] = part1_obj_match
+                    pair_data["value"] = part2
                 elif part2_obj_match:
-                    pair_data['api_name'] = part2_obj_match
-                    pair_data['value'] = part1
+                    pair_data["api_name"] = part2_obj_match
+                    pair_data["value"] = part1
 
         return pair_data
 
@@ -230,24 +220,25 @@ class Utils(object):
 
             # Get object metadata (with field fallbacks)
             # This way, we can handle multiple formats for the input JSON
-            obj['id'] = Utils.get_one_of(data, ['id', 'object_id', 'tq_id'])
-            obj['api_name'] = Utils.match_name_to_object(Utils.get_one_of(
-                data, ['object_name', 'object_type', 'object_code', 'collection', 'api_name'])).get('collection')
-            obj['value'] = Utils.get_one_of(data, ['value', 'title', 'name', 'object_value'])
-            obj['type'] = Utils.get_one_of(data, ['type', 'subtype', 'type_name'])
-            obj['tags'] = Utils.get_one_of(data, ['tags'])
-            obj['attributes'] = Utils.get_one_of(data, ['attributes'])
-            obj['status'] = Utils.get_one_of(data, ['status', 'object_status', 'status_name'])
-            obj['description'] = Utils.get_one_of(data, ['description', 'desc'])
+            obj["id"] = Utils.get_one_of(data, ["id", "object_id", "tq_id"])
+            obj["api_name"] = Utils.match_name_to_object(
+                Utils.get_one_of(data, ["object_name", "object_type", "object_code", "collection", "api_name"])
+            ).get("collection")
+            obj["value"] = Utils.get_one_of(data, ["value", "title", "name", "object_value"])
+            obj["type"] = Utils.get_one_of(data, ["type", "subtype", "type_name"])
+            obj["tags"] = Utils.get_one_of(data, ["tags"])
+            obj["attributes"] = Utils.get_one_of(data, ["attributes"])
+            obj["status"] = Utils.get_one_of(data, ["status", "object_status", "status_name"])
+            obj["description"] = Utils.get_one_of(data, ["description", "desc"])
 
             # If no API name (object name) or object value is found, add to unknown list
-            if obj['value'] or obj['id']:
+            if obj["value"] or obj["id"]:
                 output.append(obj)
             else:
                 unknown.append(data)
         elif isinstance(data, int):
             obj = copy(Utils.object_data)
-            obj['id'] = data
+            obj["id"] = data
             output.append(obj)
         elif isinstance(data, string_types):
             s_known, s_unknown = Utils.parse_agnostic_string(data, use_indicator_parser)
@@ -271,10 +262,10 @@ class Utils(object):
 
         for obj in threatq_objects:
             if (
-                Utils.flatten_string(name) == Utils.flatten_string(obj['display_name'])
-                or Utils.flatten_string(name) == Utils.flatten_string(obj['name']) # noqa
-                or Utils.flatten_string(name) == Utils.flatten_string(obj['display_name_plural']) # noqa
-                or Utils.flatten_string(name) == Utils.flatten_string(obj['collection']) # noqa
+                Utils.flatten_string(name) == Utils.flatten_string(obj["display_name"])
+                or Utils.flatten_string(name) == Utils.flatten_string(obj["name"])
+                or Utils.flatten_string(name) == Utils.flatten_string(obj["display_name_plural"])
+                or Utils.flatten_string(name) == Utils.flatten_string(obj["collection"])
             ):
                 return obj
         return {}
@@ -294,12 +285,12 @@ class Utils(object):
 
         for obj in threatq_objects:
             # Skip over any non-indicator types
-            if obj['name'] != 'indicator':
+            if obj["name"] != "indicator":
                 continue
 
-            for i in obj.get('types', []):
-                if Utils.flatten_string(i['name']) == Utils.flatten_string(name):
-                    return i['name']
+            for i in obj.get("types", []):
+                if Utils.flatten_string(i["name"]) == Utils.flatten_string(name):
+                    return i["name"]
 
     @staticmethod
     def match_name_to_event_type(name):
@@ -316,12 +307,12 @@ class Utils(object):
 
         for obj in threatq_objects:
             # Skip over any non-event
-            if obj['name'] != 'event':
+            if obj["name"] != "event":
                 continue
 
-            for i in obj.get('types', []):
-                if Utils.flatten_string(i['name']) == Utils.flatten_string(name):
-                    return i['name']
+            for i in obj.get("types", []):
+                if Utils.flatten_string(i["name"]) == Utils.flatten_string(name):
+                    return i["name"]
 
     @staticmethod
     def match_assignee(assignee, tq_users):
@@ -341,10 +332,9 @@ class Utils(object):
 
         matched = None
         for user in tq_users:
-            if (
-                Utils.flatten_string(assignee) == Utils.flatten_string(user['display_name'])
-                or Utils.flatten_string(assignee) == Utils.flatten_string(user['email']) # noqa
-            ):
+            if Utils.flatten_string(assignee) == Utils.flatten_string(user["display_name"]) or Utils.flatten_string(
+                assignee
+            ) == Utils.flatten_string(user["email"]):
                 matched = user
                 break
 
@@ -362,7 +352,7 @@ class Utils(object):
         Returns: A flattened string
         """
 
-        value = value.replace('\n', '').replace('_', '').replace(' ', '')
+        value = value.replace("\n", "").replace("_", "").replace(" ", "")
         return value.lower()
 
     @staticmethod
@@ -381,21 +371,21 @@ class Utils(object):
 
         # Replace the protocol with a wildcard
         if Utils.is_url(value):
-            value = Utils.remove_protocol(value, replacement='%')
+            value = Utils.remove_protocol(value, replacement="%")
 
             # Strip out everything after the forward-slash in the URL
             # Or add a wildcard to match any full URLs
-            if '/' in value:
-                value = u'{}%'.format(value.split('/')[0])
+            if "/" in value:
+                value = "{}%".format(value.split("/")[0])
             else:
-                value = u'{}%'.format(value)
+                value = f"{value}%"
 
-            if not value.startswith('%'):
-                value = u'%{}'.format(value)
+            if not value.startswith("%"):
+                value = f"%{value}"
 
         # Patch weird unicode passing issue
         if value.startswith("u'") or value.startswith("[u'"):
-            value = value.replace("[u'", '').replace("u'", '')
+            value = value.replace("[u'", "").replace("u'", "")
             if value.endswith("'"):
                 value = value[:-1]
             elif value.endswith("']"):
@@ -404,7 +394,7 @@ class Utils(object):
         return value
 
     @staticmethod
-    def remove_protocol(value, replacement=''):
+    def remove_protocol(value, replacement=""):
         """
         Removes a protocol from a string. Then replaces it with a given value.
 
@@ -415,18 +405,18 @@ class Utils(object):
         Returns: A value without a protocol (URL Parameter-safe)
         """
 
-        value = value.replace('http://', replacement, 1)
-        value = value.replace('https://', replacement, 1)
-        value = value.replace('ssh://', replacement, 1)
-        value = value.replace('tcp://', replacement, 1)
-        value = value.replace('udp://', replacement, 1)
-        if value.startswith('%'):
-            value = value.replace('www.', '')
+        value = value.replace("http://", replacement, 1)
+        value = value.replace("https://", replacement, 1)
+        value = value.replace("ssh://", replacement, 1)
+        value = value.replace("tcp://", replacement, 1)
+        value = value.replace("udp://", replacement, 1)
+        if value.startswith("%"):
+            value = value.replace("www.", "")
         else:
-            value = value.replace('www.', '%')
+            value = value.replace("www.", "%")
 
         # Remove trailing /
-        if value.endswith('/'):
+        if value.endswith("/"):
             value = value[:-1]
 
         return value
@@ -459,13 +449,13 @@ class Utils(object):
         if relationships:
             for i in object_types:
                 # Skip bugged object types
-                if '_' in i:
+                if "_" in i:
                     continue
 
                 if i in typed_objects:
-                    output.append("{}.type".format(i))
+                    output.append(f"{i}.type")
                 if i in statused_objects:
-                    output.append("{}.status".format(i))
+                    output.append(f"{i}.status")
                     output.append(i)
                 if i not in typed_objects and i not in statused_objects:
                     output.append(i)
@@ -485,33 +475,33 @@ class Utils(object):
 
         output = {}
 
-        if 'value' in details:
-            output['value'] = details['value']
-        if 'title' in details:
-            output['title'] = details['title']
-        if 'name' in details:
-            output['name'] = details['name']
-        if 'published_at' in details:
-            output['published_at'] = details['published_at']
-        if 'score' in details:
-            output['score'] = details['score']
+        if "value" in details:
+            output["value"] = details["value"]
+        if "title" in details:
+            output["title"] = details["title"]
+        if "name" in details:
+            output["name"] = details["name"]
+        if "published_at" in details:
+            output["published_at"] = details["published_at"]
+        if "score" in details:
+            output["score"] = details["score"]
 
         # Load types and statuses
-        if 'status' in details:
-            if isinstance(details['status'], dict):
-                output['status'] = details.get('status', {}).get('name', 'N/A')
+        if "status" in details:
+            if isinstance(details["status"], dict):
+                output["status"] = details.get("status", {}).get("name", "N/A")
             else:
-                output['status'] = details['status']
-        if 'type' in details:
-            if isinstance(details['type'], dict):
-                output['type'] = details.get('type', {}).get('name', 'N/A')
+                output["status"] = details["status"]
+        if "type" in details:
+            if isinstance(details["type"], dict):
+                output["type"] = details.get("type", {}).get("name", "N/A")
             else:
-                output['type'] = details['type']
+                output["type"] = details["type"]
 
         # Load relationship data
         for i in object_types:
             if i in details and isinstance(details[i], list) and len(details[i]) > 0:
-                output["related_{}".format(i)] = len(details[i])
+                output[f"related_{i}"] = len(details[i])
 
         return output
 
@@ -545,13 +535,13 @@ class Utils(object):
         """
 
         # Check if URL
-        pattern = re.compile(IndicatorParser.regex_map['url'], flags=re.IGNORECASE)
+        pattern = re.compile(IndicatorParser.regex_map["url"], flags=re.IGNORECASE)
         for match in re.finditer(pattern, value):
             if match and match.group(0):
                 return True
 
         # Check if Domain
-        pattern = re.compile(IndicatorParser.regex_map['domain'], flags=re.IGNORECASE)
+        pattern = re.compile(IndicatorParser.regex_map["domain"], flags=re.IGNORECASE)
         for match in re.finditer(pattern, value):
             if match and match.group(0):
                 return True
