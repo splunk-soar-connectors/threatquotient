@@ -59,7 +59,7 @@
         "trust_ssl": {
             "description": "Trust SSL Certificate?",
             "data_type": "boolean",
-            "default": true,
+            "default": false,
             "order": 4
         }
     },
