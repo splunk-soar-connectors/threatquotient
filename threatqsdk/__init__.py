@@ -2,7 +2,7 @@
 # File: __init__.py
 #
 # ThreatQuotient Proprietary and Confidential
-# Copyright (c) 2016-2025 ThreatQuotient, Inc. All rights reserved.
+# Copyright (c) 2016-2026 ThreatQuotient, Inc. All rights reserved.
 #
 # NOTICE: All information contained herein, is, and remains the property of ThreatQuotient, Inc.
 # The intellectual and technical concepts contained herein are proprietary to ThreatQuotient, Inc.
@@ -58,6 +58,7 @@ __all__ = [
 _logger = getLogger(__name__)
 
 VERSION = "1.6.4-pmod"
+
 
 class Threatq:
     """A connection to the ThreatQuotient API.
