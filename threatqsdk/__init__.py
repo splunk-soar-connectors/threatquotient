@@ -2,7 +2,7 @@
 # File: __init__.py
 #
 # ThreatQuotient Proprietary and Confidential
-# Copyright (c) 2016-2025 ThreatQuotient, Inc. All rights reserved.
+# Copyright (c) 2016-2026 ThreatQuotient, Inc. All rights reserved.
 #
 # NOTICE: All information contained herein, is, and remains the property of ThreatQuotient, Inc.
 # The intellectual and technical concepts contained herein are proprietary to ThreatQuotient, Inc.
@@ -23,7 +23,6 @@ from datetime import datetime
 from logging import getLogger
 
 import requests
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 # import all of the child modules so consumers can easily access them
 from . import (
@@ -60,8 +59,6 @@ _logger = getLogger(__name__)
 
 VERSION = "1.6.4-pmod"
 
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-
 
 class Threatq:
     """A connection to the ThreatQuotient API.
@@ -84,7 +81,7 @@ class Threatq:
         In the format ``https://host.name:port``
     """
 
-    def __init__(self, threatq_host, auth, private=False, verify=False, proxy=None):
+    def __init__(self, threatq_host, auth, private=False, verify=True, proxy=None):
         self.statusinfo = None
 
         host_match = re.compile(r"^(\w+://)?([A-Z\d\-\.:]+)", re.IGNORECASE)

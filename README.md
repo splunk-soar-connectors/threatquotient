@@ -1,9 +1,9 @@
 # ThreatQ
 
-Publisher: ThreatQuotient \
-Connector Version: 2.4.0 \
-Product Vendor: ThreatQuotient \
-Product Name: ThreatQ \
+Publisher: ThreatQuotient <br>
+Connector Version: 2.4.0 <br>
+Product Vendor: ThreatQuotient <br>
+Product Name: ThreatQ <br>
 Minimum Product Version: 6.1.1
 
 Integrates a variety of ThreatQ services into Splunk SOAR
@@ -333,28 +333,28 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity \
-[query indicators](#action-query-indicators) - Query ThreatQ for indicator context \
-[create indicators](#action-create-indicators) - Create indicators within ThreatQ \
-[create adversaries](#action-create-adversaries) - Create adversaries within ThreatQ \
-[create custom objects](#action-create-custom-objects) - Create custom objects within ThreatQ \
-[add attribute](#action-add-attribute) - Adds an attribute to objects in ThreatQ \
-[add comment](#action-add-comment) - Adds a comment to objects in ThreatQ \
-[add tag](#action-add-tag) - Adds a tag to objects in ThreatQ \
-[set indicator status](#action-set-indicator-status) - Set a status for a given list of indicators \
-[create task](#action-create-task) - Create a task within ThreatQ \
-[create event](#action-create-event) - Create an event within ThreatQ \
-[start investigation](#action-start-investigation) - Start an investigation within ThreatQ \
-[upload spearphish](#action-upload-spearphish) - Upload a spearphish attempt to ThreatQ \
-[upload file](#action-upload-file) - Upload (and parse) a file to ThreatQ \
-[get related objects](#action-get-related-objects) - Query ThreatQ for an object's relationships \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity <br>
+[query indicators](#action-query-indicators) - Query ThreatQ for indicator context <br>
+[create indicators](#action-create-indicators) - Create indicators within ThreatQ <br>
+[create adversaries](#action-create-adversaries) - Create adversaries within ThreatQ <br>
+[create custom objects](#action-create-custom-objects) - Create custom objects within ThreatQ <br>
+[add attribute](#action-add-attribute) - Adds an attribute to objects in ThreatQ <br>
+[add comment](#action-add-comment) - Adds a comment to objects in ThreatQ <br>
+[add tag](#action-add-tag) - Adds a tag to objects in ThreatQ <br>
+[set indicator status](#action-set-indicator-status) - Set a status for a given list of indicators <br>
+[create task](#action-create-task) - Create a task within ThreatQ <br>
+[create event](#action-create-event) - Create an event within ThreatQ <br>
+[start investigation](#action-start-investigation) - Start an investigation within ThreatQ <br>
+[upload spearphish](#action-upload-spearphish) - Upload a spearphish attempt to ThreatQ <br>
+[upload file](#action-upload-file) - Upload (and parse) a file to ThreatQ <br>
+[get related objects](#action-get-related-objects) - Query ThreatQ for an object's relationships <br>
 [create signature](#action-create-signature) - Create a signature within ThreatQ
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -369,7 +369,7 @@ No Output
 
 Query ThreatQ for indicator context
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -420,7 +420,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Create indicators within ThreatQ
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -447,7 +447,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Create adversaries within ThreatQ
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -472,7 +472,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Create custom objects within ThreatQ
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -499,7 +499,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Adds an attribute to objects in ThreatQ
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -532,7 +532,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Adds a comment to objects in ThreatQ
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -563,7 +563,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Adds a tag to objects in ThreatQ
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -594,7 +594,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Set a status for a given list of indicators
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -621,7 +621,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Create a task within ThreatQ
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -658,7 +658,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Create an event within ThreatQ
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -685,7 +685,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Start an investigation within ThreatQ
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -718,7 +718,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Upload a spearphish attempt to ThreatQ
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -745,7 +745,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Upload (and parse) a file to ThreatQ
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -774,7 +774,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Query ThreatQ for an object's relationships
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -810,7 +810,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Create a signature within ThreatQ
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -841,7 +841,7 @@ ______________________________________________________________________
 
 Auto-generated Splunk SOAR Connector documentation.
 
-Copyright 2025 Splunk Inc.
+Copyright 2026 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

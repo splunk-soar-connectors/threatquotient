@@ -19,7 +19,7 @@
     ],
     "package_name": "threatq",
     "type": "information",
-    "license": "Copyright (c) 2016-2025 ThreatQuotient, Inc.",
+    "license": "Copyright (c) 2016-2026 ThreatQuotient, Inc.",
     "main_module": "threatq_connector.py",
     "app_version": "2.4.0",
     "utctime_updated": "2022-12-11T22:11:10.000000Z",
@@ -59,7 +59,7 @@
         "trust_ssl": {
             "description": "Trust SSL Certificate?",
             "data_type": "boolean",
-            "default": true,
+            "default": false,
             "order": 4
         }
     },
@@ -1970,5 +1970,11 @@
             ],
             "versions": "EQ(*)"
         }
-    ]
+    ],
+    "pip39_dependencies": {
+        "wheel": []
+    },
+    "pip313_dependencies": {
+        "wheel": []
+    }
 }
