@@ -23,6 +23,10 @@ class IndicatorParser:
     Class used to facilitate parsing an unstructured string for any indicators
     """
 
+    # Do not run the regular expressions over unbounded action input. A single
+    # indicator is expected to be substantially shorter than this limit.
+    MAX_TEXT_LENGTH = 1024
+
     # Maps indicator type to a regex match
     # NOTE: These were recently re-written (June 9th, 2022). DO NOT change these without consulting
     # either Zach Shames or Brandon Zimlich-Vining. They are improvements over existing platform
@@ -94,7 +98,7 @@ class IndicatorParser:
         Returns: List of indicator matches
         """
 
-        if not self.text:
+        if not self.text or len(self.text) > self.MAX_TEXT_LENGTH:
             return []
 
         all_matches = []

@@ -534,6 +534,9 @@ class Utils:
         Returns: True or False
         """
 
+        if not value or len(value) > IndicatorParser.MAX_TEXT_LENGTH:
+            return False
+
         # Check if URL
         pattern = re.compile(IndicatorParser.regex_map["url"], flags=re.IGNORECASE)
         for match in re.finditer(pattern, value):
