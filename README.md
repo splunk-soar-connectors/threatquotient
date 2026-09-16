@@ -1,7 +1,7 @@
 # ThreatQ
 
 Publisher: ThreatQuotient <br>
-Connector Version: 3.0.0 <br>
+Connector Version: 3.0.1 <br>
 Product Vendor: ThreatQuotient <br>
 Product Name: ThreatQ <br>
 Minimum Product Version: 6.1.1
